@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seven Midas — Kanban</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header class="header">
+    <div class="logo">Seven<span>Midas</span></div>
+
+    <div class="filters">
+      <select id="filterClient"><option value="">Todos os clientes</option></select>
+      <select id="filterCategory"><option value="">Todas as categorias</option></select>
+      <select id="filterMember"><option value="">Todos</option></select>
+      <input type="text" id="filterSearch" placeholder="Buscar...">
+      <button class="btn-filter" id="btnMyTasks">Minhas</button>
+    </div>
+
+    <div class="header-right">
+      <button class="btn-new" id="btnNew">+ Nova</button>
+      <div class="user-info" id="changeUser">
+        <span class="avatar" id="currentUserAvatar">?</span>
+        <span id="currentUser"></span>
+      </div>
+    </div>
+  </header>
+
+  <!-- MOBILE TABS -->
+  <div class="tabs">
+    <button class="tab-btn active" data-column="todo">A Fazer</button>
+    <button class="tab-btn" data-column="doing">Andamento</button>
+    <button class="tab-btn" data-column="review">Revisão</button>
+    <button class="tab-btn" data-column="done">Feito</button>
+  </div>
+
+  <!-- BOARD -->
+  <div class="board">
+    <div class="column" data-column="todo">
+      <div class="col-header">
+        <span class="col-title">A Fazer</span>
+        <span class="col-count" id="count-todo">0</span>
+      </div>
+      <div class="col-cards" id="col-todo" data-column="todo"></div>
+    </div>
+
+    <div class="column" data-column="doing">
+      <div class="col-header">
+        <span class="col-title">Em Andamento</span>
+        <span class="col-count" id="count-doing">0</span>
+      </div>
+      <div class="col-cards" id="col-doing" data-column="doing"></div>
+    </div>
+
+    <div class="column" data-column="review">
+      <div class="col-header">
+        <span class="col-title">Revisão</span>
+        <span class="col-count" id="count-review">0</span>
+      </div>
+      <div class="col-cards" id="col-review" data-column="review"></div>
+    </div>
+
+    <div class="column" data-column="done">
+      <div class="col-header">
+        <span class="col-title">Concluído</span>
+        <span class="col-count" id="count-done">0</span>
+      </div>
+      <div class="col-cards" id="col-done" data-column="done"></div>
+    </div>
+  </div>
+
+  <!-- MODAL -->
+  <div class="modal-overlay" id="modalOverlay"></div>
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <h2 id="modalTitle">Nova Tarefa</h2>
+    </div>
+    <form id="cardForm">
+      <div class="modal-body">
+        <div class="form-group">
+          <label>Título</label>
+          <input type="text" id="inputTitle" required placeholder="O que precisa ser feito?">
+        </div>
+        <div class="form-group">
+          <label>Descrição</label>
+          <textarea id="inputDesc" placeholder="Detalhes, links, observações..."></textarea>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Cliente</label>
+            <select id="inputClient"><option value="">Sem cliente</option></select>
+          </div>
+          <div class="form-group">
+            <label>Categoria</label>
+            <select id="inputCategory"></select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Prioridade</label>
+            <select id="inputPriority"></select>
+          </div>
+          <div class="form-group">
+            <label>Responsável</label>
+            <select id="inputAssignee"><option value="">Ninguém</option></select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Prazo</label>
+          <input type="date" id="inputDueDate">
+        </div>
+      </div>
+      <div id="mobileMove" class="mobile-move"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn-delete" id="btnDelete" style="display:none">Excluir</button>
+        <button type="button" class="btn-cancel" id="btnCancel">Cancelar</button>
+        <button type="submit" class="btn-save" id="btnSave">Salvar</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- USER PICKER -->
+  <div class="user-picker" id="userPicker">
+    <h2>Quem é você?</h2>
+    <div class="user-list" id="userList"></div>
+  </div>
+
+  <!-- LOADING -->
+  <div class="loading" id="loading">
+    <div style="text-align:center">
+      <div class="spinner"></div>
+      Carregando...
+    </div>
+  </div>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sortablejs@1.15.6/Sortable.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/drag.js"></script>
+  <script src="js/modal.js"></script>
+  <script src="js/app.js"></script>
+
+</body>
+</html>
