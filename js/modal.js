@@ -6,10 +6,10 @@ function populateSelect(id, items, groupKey) {
   const sel = document.getElementById(id);
   if (!sel) return;
 
-  // Keep first option (placeholder)
-  const first = sel.options[0];
+  // Keep first option (placeholder) if exists
+  const first = sel.options.length > 0 ? sel.options[0] : null;
   sel.innerHTML = '';
-  sel.appendChild(first);
+  if (first) sel.appendChild(first);
 
   if (groupKey) {
     // Grouped select (clients)
