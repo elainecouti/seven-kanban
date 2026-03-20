@@ -2,56 +2,70 @@
 
 let cards = [];
 let filteredCards = [];
+let cardChecklists = {}; // cache: cardId -> {total, checked}
 
 function getClient(id) {
-  return allClients.find(c => c.id === id);
+  return allClients.find(function(c) { return c.id === id; });
 }
 
 function getMember(id) {
-  return allMembers.find(m => m.id === id);
+  return allMembers.find(function(m) { return m.id === id; });
 }
 
 function getCategoryInfo(key) {
-  return CATEGORIES.find(c => c.key === key) || CATEGORIES[CATEGORIES.length - 1];
+  return CATEGORIES.find(function(c) { return c.key === key; }) || CATEGORIES[CATEGORIES.length - 1];
 }
 
 function getPriorityInfo(key) {
-  return PRIORITIES.find(p => p.key === key) || PRIORITIES[2];
+  return PRIORITIES.find(function(p) { return p.key === key; }) || PRIORITIES[2];
 }
 
 function formatDate(dateStr) {
   if (!dateStr) return '';
-  const d = new Date(dateStr + 'T12:00:00');
-  const day = d.getDate();
-  const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+  var d = new Date(dateStr + 'T12:00:00');
+  var day = d.getDate();
+  var months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
   return day + ' ' + months[d.getMonth()];
 }
 
 function isOverdue(dateStr) {
   if (!dateStr) return false;
-  const today = new Date();
+  var today = new Date();
   today.setHours(0,0,0,0);
-  const due = new Date(dateStr + 'T12:00:00');
+  var due = new Date(dateStr + 'T12:00:00');
   return due < today;
 }
 
 function renderCard(card) {
-  const client = getClient(card.client_id);
-  const member = getMember(card.assignee_id);
-  const cat = getCategoryInfo(card.category);
-  const pri = getPriorityInfo(card.priority);
-  const overdue = card.column_key !== 'done' && isOverdue(card.due_date);
+  var client = getClient(card.client_id);
+  var member = getMember(card.assignee_id);
+  var cat = getCategoryInfo(card.category);
+  var pri = getPriorityInfo(card.priority);
+  var overdue = card.column_key !== 'done' && isOverdue(card.due_date);
+  var cl = cardChecklists[card.id];
 
-  const el = document.createElement('div');
+  var el = document.createElement('div');
   el.className = 'card';
   el.dataset.id = card.id;
   el.style.borderLeftColor = pri.color;
+
+  var progressHtml = '';
+  if (cl && cl.total > 0) {
+    var pct = Math.round((cl.checked / cl.total) * 100);
+    var pctColor = pct === 100 ? '#00b894' : (pct > 50 ? '#6c5ce7' : '#ddd');
+    progressHtml =
+      '<div class="card-progress">' +
+        '<div class="card-progress-bar"><div class="card-progress-fill" style="width:' + pct + '%;background:' + pctColor + '"></div></div>' +
+        '<span class="card-progress-text">' + cl.checked + '/' + cl.total + '</span>' +
+      '</div>';
+  }
 
   el.innerHTML =
     '<div class="card-top">' +
       '<span class="card-title">' + escapeHtml(card.title) + '</span>' +
       '<button class="card-menu" onclick="event.stopPropagation();openCardDetail(\'' + card.id + '\')" title="Editar">&#8942;</button>' +
     '</div>' +
+    progressHtml +
     '<div class="card-tags">' +
       (client ? '<span class="tag tag-client" style="background:' + client.color + '22;color:' + client.color + '">' + escapeHtml(client.name) + '</span>' : '') +
       '<span class="tag tag-cat">' + cat.icon + ' ' + cat.label + '</span>' +
@@ -70,26 +84,25 @@ function renderCard(card) {
 
 function renderBoard() {
   COLUMNS.forEach(function(col) {
-    const container = document.getElementById('col-' + col.key);
-    const countEl = document.getElementById('count-' + col.key);
+    var container = document.getElementById('col-' + col.key);
+    var countEl = document.getElementById('count-' + col.key);
     if (!container) return;
 
-    const colCards = filteredCards.filter(c => c.column_key === col.key);
+    var colCards = filteredCards.filter(function(c) { return c.column_key === col.key; });
     countEl.textContent = colCards.length;
 
-    // Keep sortable instance, just replace children
     container.innerHTML = '';
-    colCards.sort((a, b) => a.position - b.position).forEach(function(card) {
+    colCards.sort(function(a, b) { return a.position - b.position; }).forEach(function(card) {
       container.appendChild(renderCard(card));
     });
   });
 }
 
 function applyFilters() {
-  const clientFilter = document.getElementById('filterClient').value;
-  const catFilter = document.getElementById('filterCategory').value;
-  const memberFilter = document.getElementById('filterMember').value;
-  const search = document.getElementById('filterSearch').value.toLowerCase();
+  var clientFilter = document.getElementById('filterClient').value;
+  var catFilter = document.getElementById('filterCategory').value;
+  var memberFilter = document.getElementById('filterMember').value;
+  var search = document.getElementById('filterSearch').value.toLowerCase();
 
   filteredCards = cards.filter(function(c) {
     if (clientFilter && c.client_id !== clientFilter) return false;
@@ -101,7 +114,6 @@ function applyFilters() {
 
   renderBoard();
 
-  // Save filters
   localStorage.setItem('kanban_filters', JSON.stringify({
     client: clientFilter, category: catFilter, member: memberFilter, search: search
   }));
@@ -109,7 +121,7 @@ function applyFilters() {
 
 function restoreFilters() {
   try {
-    const saved = JSON.parse(localStorage.getItem('kanban_filters') || '{}');
+    var saved = JSON.parse(localStorage.getItem('kanban_filters') || '{}');
     if (saved.client) document.getElementById('filterClient').value = saved.client;
     if (saved.category) document.getElementById('filterCategory').value = saved.category;
     if (saved.member) document.getElementById('filterMember').value = saved.member;
@@ -117,8 +129,20 @@ function restoreFilters() {
   } catch(e) {}
 }
 
+// Load checklist counts for all cards
+async function loadChecklistCounts() {
+  var { data } = await sb.from('checklist_items').select('card_id, checked');
+  if (!data) return;
+  cardChecklists = {};
+  data.forEach(function(item) {
+    if (!cardChecklists[item.card_id]) cardChecklists[item.card_id] = { total: 0, checked: 0 };
+    cardChecklists[item.card_id].total++;
+    if (item.checked) cardChecklists[item.card_id].checked++;
+  });
+}
+
 function escapeHtml(text) {
-  const d = document.createElement('div');
+  var d = document.createElement('div');
   d.textContent = text;
   return d.innerHTML;
 }

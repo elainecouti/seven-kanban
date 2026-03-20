@@ -1,28 +1,26 @@
 /* Seven Midas Kanban — App Init */
 
 async function loadBoard() {
+  await loadChecklistCounts();
   cards = await fetchCards();
   applyFilters();
 }
 
 async function init() {
-  // Show loading
   document.getElementById('loading').style.display = 'flex';
 
-  // Check user
-  const currentUser = localStorage.getItem('kanban_user');
+  var currentUser = localStorage.getItem('kanban_user');
   if (!currentUser) {
     document.getElementById('userPicker').style.display = 'flex';
     document.getElementById('loading').style.display = 'none';
   }
 
-  // Load data
-  await Promise.all([fetchClients(), fetchMembers()]);
+  await Promise.all([fetchClients(), fetchMembers(), fetchTemplates()]);
 
-  // Populate user picker
-  const userList = document.getElementById('userList');
+  // User picker
+  var userList = document.getElementById('userList');
   allMembers.forEach(function(m) {
-    const btn = document.createElement('button');
+    var btn = document.createElement('button');
     btn.className = 'user-btn';
     btn.innerHTML = '<span class="avatar-lg" style="background:' + m.avatar_color + '">' + m.name.charAt(0) + '</span>' + m.name;
     btn.onclick = function() {
@@ -38,7 +36,7 @@ async function init() {
   });
 
   if (currentUser) {
-    const user = allMembers.find(m => m.id === currentUser);
+    var user = allMembers.find(function(m) { return m.id === currentUser; });
     if (user) {
       document.getElementById('currentUser').textContent = user.name;
       document.getElementById('currentUserAvatar').style.background = user.avatar_color;
@@ -49,24 +47,13 @@ async function init() {
 }
 
 async function finishInit() {
-  // Populate filters
   populateFilterDropdowns();
   restoreFilters();
-
-  // Load cards
   await loadBoard();
-
-  // Init drag & drop
   initSortable();
-
-  // Hide loading
   document.getElementById('loading').style.display = 'none';
 
-  // Realtime
-  subscribeCards(function(payload) {
-    // Reload on any change from other users
-    loadBoard();
-  });
+  subscribeCards(function() { loadBoard(); });
 
   // Filter events
   document.getElementById('filterClient').addEventListener('change', applyFilters);
@@ -74,23 +61,21 @@ async function finishInit() {
   document.getElementById('filterMember').addEventListener('change', applyFilters);
   document.getElementById('filterSearch').addEventListener('input', debounce(applyFilters, 300));
 
-  // Detail panel overlay click to close
+  // Detail overlay click
   document.getElementById('detailOverlay').addEventListener('click', closeDetail);
 
-  // New card
+  // New card button — dropdown with "Nova" and "Template"
   document.getElementById('btnNew').addEventListener('click', openNewCardModal);
+  document.getElementById('btnTemplate').addEventListener('click', openTemplatePicker);
 
-  // Mobile tab
+  // Mobile tabs
   function activateMobileTab(colKey) {
-    document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.column === colKey));
-    document.querySelectorAll('.column').forEach(c => c.classList.toggle('mobile-active', c.dataset.column === colKey));
+    document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.column === colKey); });
+    document.querySelectorAll('.column').forEach(function(c) { c.classList.toggle('mobile-active', c.dataset.column === colKey); });
   }
-  activateMobileTab('todo'); // default
-
+  activateMobileTab('todo');
   document.querySelectorAll('.tab-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      activateMobileTab(btn.dataset.column);
-    });
+    btn.addEventListener('click', function() { activateMobileTab(btn.dataset.column); });
   });
 
   // Change user
@@ -98,27 +83,19 @@ async function finishInit() {
     document.getElementById('userPicker').style.display = 'flex';
   });
 
-  // My tasks filter
+  // My tasks
   document.getElementById('btnMyTasks').addEventListener('click', function() {
-    const userId = localStorage.getItem('kanban_user');
-    const mf = document.getElementById('filterMember');
-    if (mf.value === userId) {
-      mf.value = '';
-    } else {
-      mf.value = userId;
-    }
+    var userId = localStorage.getItem('kanban_user');
+    var mf = document.getElementById('filterMember');
+    mf.value = mf.value === userId ? '' : userId;
     this.classList.toggle('active');
     applyFilters();
   });
 }
 
 function debounce(fn, ms) {
-  let t;
-  return function() {
-    clearTimeout(t);
-    t = setTimeout(fn, ms);
-  };
+  var t;
+  return function() { clearTimeout(t); t = setTimeout(fn, ms); };
 }
 
-// Start
 document.addEventListener('DOMContentLoaded', init);
