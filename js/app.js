@@ -50,7 +50,7 @@ async function init() {
 
 async function finishInit() {
   // Populate filters
-  populateFilters();
+  populateFilterDropdowns();
   restoreFilters();
 
   // Load cards
@@ -74,11 +74,8 @@ async function finishInit() {
   document.getElementById('filterMember').addEventListener('change', applyFilters);
   document.getElementById('filterSearch').addEventListener('input', debounce(applyFilters, 300));
 
-  // Modal events
-  document.getElementById('cardForm').addEventListener('submit', saveCard);
-  document.getElementById('btnDelete').addEventListener('click', removeCard);
-  document.getElementById('btnCancel').addEventListener('click', closeModal);
-  document.getElementById('modalOverlay').addEventListener('click', closeModal);
+  // Detail panel overlay click to close
+  document.getElementById('detailOverlay').addEventListener('click', closeDetail);
 
   // New card
   document.getElementById('btnNew').addEventListener('click', openNewCardModal);

@@ -72,55 +72,9 @@
     </div>
   </div>
 
-  <!-- MODAL -->
-  <div class="modal-overlay" id="modalOverlay"></div>
-  <div class="modal" id="modal">
-    <div class="modal-header">
-      <h2 id="modalTitle">Nova Tarefa</h2>
-    </div>
-    <form id="cardForm">
-      <div class="modal-body">
-        <div class="form-group">
-          <label>Título</label>
-          <input type="text" id="inputTitle" required placeholder="O que precisa ser feito?">
-        </div>
-        <div class="form-group">
-          <label>Descrição</label>
-          <textarea id="inputDesc" placeholder="Detalhes, links, observações..."></textarea>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Cliente</label>
-            <select id="inputClient"><option value="">Sem cliente</option></select>
-          </div>
-          <div class="form-group">
-            <label>Categoria</label>
-            <select id="inputCategory"><option value="geral">Selecione</option></select>
-          </div>
-        </div>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Prioridade</label>
-            <select id="inputPriority"><option value="media">Selecione</option></select>
-          </div>
-          <div class="form-group">
-            <label>Responsável</label>
-            <select id="inputAssignee"><option value="">Ninguém</option></select>
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Prazo</label>
-          <input type="date" id="inputDueDate">
-        </div>
-      </div>
-      <div id="mobileMove" class="mobile-move"></div>
-      <div class="modal-footer">
-        <button type="button" class="btn-delete" id="btnDelete" style="display:none">Excluir</button>
-        <button type="button" class="btn-cancel" id="btnCancel">Cancelar</button>
-        <button type="submit" class="btn-save" id="btnSave">Salvar</button>
-      </div>
-    </form>
-  </div>
+  <!-- DETAIL PANEL (Trello-style) -->
+  <div class="detail-overlay" id="detailOverlay"></div>
+  <div class="detail-panel" id="detailPanel"></div>
 
   <!-- USER PICKER -->
   <div class="user-picker" id="userPicker">

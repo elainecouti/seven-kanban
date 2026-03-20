@@ -50,7 +50,7 @@ function renderCard(card) {
   el.innerHTML =
     '<div class="card-top">' +
       '<span class="card-title">' + escapeHtml(card.title) + '</span>' +
-      '<button class="card-menu" onclick="openCardModal(\'' + card.id + '\')" title="Editar">&#8942;</button>' +
+      '<button class="card-menu" onclick="event.stopPropagation();openCardDetail(\'' + card.id + '\')" title="Editar">&#8942;</button>' +
     '</div>' +
     '<div class="card-tags">' +
       (client ? '<span class="tag tag-client" style="background:' + client.color + '22;color:' + client.color + '">' + escapeHtml(client.name) + '</span>' : '') +
@@ -62,7 +62,7 @@ function renderCard(card) {
     '</div>';
 
   el.addEventListener('click', function(e) {
-    if (!e.target.closest('.card-menu')) openCardModal(card.id);
+    if (!e.target.closest('.card-menu')) openCardDetail(card.id);
   });
 
   return el;
