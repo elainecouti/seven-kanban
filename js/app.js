@@ -1,9 +1,36 @@
 /* Seven Midas Kanban — App Init */
 
+let overdueFilterActive = false;
+let currentView = 'board'; // 'board', 'calendar', 'dashboard'
+
 async function loadBoard() {
   await loadChecklistCounts();
   cards = await fetchCards();
+
+  // Auto-archive: cards in "done" with completed_at older than 7 days
+  await autoArchiveCompleted();
+
   applyFilters();
+
+  // Re-render current view if not board
+  if (currentView === 'calendar') renderCalendar();
+  else if (currentView === 'dashboard') renderDashboard();
+}
+
+async function autoArchiveCompleted() {
+  var now = new Date();
+  var sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+  var toArchive = cards.filter(function(c) {
+    if (c.column_key !== 'done' || !c.completed_at) return false;
+    var completedAt = new Date(c.completed_at);
+    return completedAt < sevenDaysAgo;
+  });
+  for (var i = 0; i < toArchive.length; i++) {
+    try {
+      await updateCard(toArchive[i].id, { archived: true });
+      cards = cards.filter(function(c) { return c.id !== toArchive[i].id; });
+    } catch(e) { /* ignore errors */ }
+  }
 }
 
 async function init() {
@@ -56,17 +83,55 @@ async function finishInit() {
   subscribeCards(function() { loadBoard(); });
 
   // Filter events
-  document.getElementById('filterClient').addEventListener('change', applyFilters);
-  document.getElementById('filterCategory').addEventListener('change', applyFilters);
-  document.getElementById('filterMember').addEventListener('change', applyFilters);
-  document.getElementById('filterSearch').addEventListener('input', debounce(applyFilters, 300));
+  document.getElementById('filterClient').addEventListener('change', function() {
+    applyFilters();
+    if (currentView === 'calendar') renderCalendar();
+    else if (currentView === 'dashboard') renderDashboard();
+  });
+  document.getElementById('filterCategory').addEventListener('change', function() {
+    applyFilters();
+    if (currentView === 'calendar') renderCalendar();
+    else if (currentView === 'dashboard') renderDashboard();
+  });
+  document.getElementById('filterMember').addEventListener('change', function() {
+    applyFilters();
+    if (currentView === 'calendar') renderCalendar();
+    else if (currentView === 'dashboard') renderDashboard();
+  });
+  document.getElementById('filterSearch').addEventListener('input', debounce(function() {
+    applyFilters();
+    if (currentView === 'calendar') renderCalendar();
+    else if (currentView === 'dashboard') renderDashboard();
+  }, 300));
 
   // Detail overlay click
   document.getElementById('detailOverlay').addEventListener('click', closeDetail);
 
-  // New card button — dropdown with "Nova" and "Template"
+  // New card button
   document.getElementById('btnNew').addEventListener('click', openNewCardModal);
   document.getElementById('btnTemplate').addEventListener('click', openTemplatePicker);
+
+  // Calendar toggle
+  document.getElementById('btnCalendar').addEventListener('click', function() {
+    if (currentView === 'calendar') {
+      currentView = 'board';
+      showBoardView();
+    } else {
+      currentView = 'calendar';
+      showCalendarView();
+    }
+  });
+
+  // Dashboard toggle
+  document.getElementById('btnDashboard').addEventListener('click', function() {
+    if (currentView === 'dashboard') {
+      currentView = 'board';
+      showBoardView();
+    } else {
+      currentView = 'dashboard';
+      showDashboardView();
+    }
+  });
 
   // Mobile tabs
   function activateMobileTab(colKey) {
@@ -90,8 +155,47 @@ async function finishInit() {
     mf.value = mf.value === userId ? '' : userId;
     this.classList.toggle('active');
     applyFilters();
+    if (currentView === 'calendar') renderCalendar();
+    else if (currentView === 'dashboard') renderDashboard();
+  });
+
+  // Overdue filter
+  document.getElementById('btnOverdue').addEventListener('click', function() {
+    overdueFilterActive = !overdueFilterActive;
+    this.classList.toggle('active', overdueFilterActive);
+    applyFilters();
+    if (currentView === 'calendar') renderCalendar();
+    else if (currentView === 'dashboard') renderDashboard();
   });
 }
+
+// Override applyFilters to support overdue filter
+var _originalApplyFilters = applyFilters;
+applyFilters = function() {
+  var clientFilter = document.getElementById('filterClient').value;
+  var catFilter = document.getElementById('filterCategory').value;
+  var memberFilter = document.getElementById('filterMember').value;
+  var search = document.getElementById('filterSearch').value.toLowerCase();
+
+  filteredCards = cards.filter(function(c) {
+    if (clientFilter && c.client_id !== clientFilter) return false;
+    if (catFilter && c.category !== catFilter) return false;
+    if (memberFilter && c.assignee_id !== memberFilter) return false;
+    if (search && !c.title.toLowerCase().includes(search) && !(c.description || '').toLowerCase().includes(search)) return false;
+    if (overdueFilterActive) {
+      if (c.column_key === 'done') return false;
+      if (!c.due_date) return false;
+      if (!isOverdue(c.due_date)) return false;
+    }
+    return true;
+  });
+
+  renderBoard();
+
+  localStorage.setItem('kanban_filters', JSON.stringify({
+    client: clientFilter, category: catFilter, member: memberFilter, search: search
+  }));
+};
 
 function debounce(fn, ms) {
   var t;

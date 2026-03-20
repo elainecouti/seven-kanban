@@ -275,6 +275,7 @@ async function openCardDetail(cardId) {
 
     '<div class="dp-footer">' +
       '<button class="btn-delete" onclick="removeCardFromDetail()">Excluir</button>' +
+      '<button class="btn-duplicate" onclick="duplicateCardFromDetail()">Duplicar</button>' +
       '<button class="btn-save" onclick="saveCardFromDetail()">Salvar</button>' +
     '</div>';
 
@@ -461,4 +462,41 @@ async function removeCardFromDetail() {
     closeDetail();
     applyFilters();
   } catch(err) { alert('Erro: ' + err.message); }
+}
+
+async function duplicateCardFromDetail() {
+  if (!editingCardId) return;
+  var original = cards.find(function(c) { return c.id === editingCardId; });
+  if (!original) return;
+  var btn = document.querySelector('.btn-duplicate');
+  if (btn) { btn.disabled = true; btn.textContent = 'Duplicando...'; }
+  try {
+    var newCard = {
+      title: original.title + ' (copia)',
+      description: original.description || '',
+      client_id: original.client_id || null,
+      category: original.category || 'geral',
+      priority: original.priority || 'media',
+      assignee_id: original.assignee_id || null,
+      due_date: original.due_date || null,
+      column_key: 'todo',
+      position: (cards.filter(function(c) { return c.column_key === 'todo'; }).length + 1) * 10,
+      created_by: localStorage.getItem('kanban_user') || null
+    };
+    var created = await createCard(newCard);
+    cards.push(created);
+
+    // Duplicate checklist items (all unchecked)
+    var checklist = await fetchChecklist(editingCardId);
+    for (var i = 0; i < checklist.length; i++) {
+      await addChecklistItem(created.id, checklist[i].text, (i + 1) * 10);
+    }
+    if (checklist.length > 0) await loadChecklistCounts();
+
+    closeDetail();
+    applyFilters();
+  } catch(err) {
+    alert('Erro ao duplicar: ' + err.message);
+    if (btn) { btn.disabled = false; btn.textContent = 'Duplicar'; }
+  }
 }

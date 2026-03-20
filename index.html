@@ -18,11 +18,14 @@
       <select id="filterMember"><option value="">Todos</option></select>
       <input type="text" id="filterSearch" placeholder="Buscar...">
       <button class="btn-filter" id="btnMyTasks">Minhas</button>
+      <button class="btn-filter" id="btnOverdue">Atrasadas</button>
     </div>
 
     <div class="header-right">
       <button class="btn-new" id="btnNew">+ Nova</button>
       <button class="btn-template" id="btnTemplate" title="Criar a partir de template">&#9776;</button>
+      <button class="btn-view" id="btnCalendar" title="Calendario">&#128197;</button>
+      <button class="btn-view" id="btnDashboard" title="Dashboard">&#128202;</button>
       <div class="user-info" id="changeUser">
         <span class="avatar" id="currentUserAvatar">?</span>
         <span id="currentUser"></span>
@@ -73,6 +76,12 @@
     </div>
   </div>
 
+  <!-- CALENDAR VIEW -->
+  <div class="calendar-view" id="calendarView" style="display:none"></div>
+
+  <!-- DASHBOARD VIEW -->
+  <div class="dashboard-view" id="dashboardView" style="display:none"></div>
+
   <!-- DETAIL PANEL (Trello-style) -->
   <div class="detail-overlay" id="detailOverlay"></div>
   <div class="detail-panel" id="detailPanel"></div>
@@ -99,6 +108,8 @@
   <script src="js/board.js"></script>
   <script src="js/drag.js"></script>
   <script src="js/modal.js"></script>
+  <script src="js/calendar.js"></script>
+  <script src="js/dashboard.js"></script>
   <script src="js/app.js"></script>
 
 </body>
