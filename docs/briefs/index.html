@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Briefs de Criativos — Seven Midas</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'Inter',sans-serif;background:#f4f5f7;color:#1e1e2e;padding:40px 20px}
+  .container{max-width:700px;margin:0 auto}
+  h1{font-size:24px;font-weight:800;margin-bottom:8px}
+  .sub{color:#9ca3b4;font-size:14px;margin-bottom:32px}
+  .brief{display:flex;align-items:center;gap:16px;background:white;border-radius:12px;padding:18px 20px;margin-bottom:10px;text-decoration:none;color:#1e1e2e;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:all 0.2s;border-left:4px solid #e17055}
+  .brief:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+  .brief-icon{font-size:24px}
+  .brief-info{flex:1}
+  .brief-name{font-size:15px;font-weight:700}
+  .brief-meta{font-size:12px;color:#9ca3b4;margin-top:2px}
+  .brief-badge{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;background:#fef0ed;color:#e17055}
+  .back{display:inline-block;margin-top:24px;color:#7c3aed;font-size:13px;font-weight:600;text-decoration:none}
+  .back:hover{text-decoration:underline}
+  .empty{text-align:center;padding:40px;color:#9ca3b4}
+</style>
+<script>
+// Auto-list all brief files
+document.addEventListener('DOMContentLoaded', function() {
+  var container = document.getElementById('briefList');
+  var briefs = [
+    {file: 'brief_cachoeiro_2026-03-20.md', client: 'DM2 Cachoeiro', date: '20/03/2026'},
+    {file: 'brief_campos-dos-goytacazes_2026-03-20.md', client: 'DM2 Campos dos Goytacazes', date: '20/03/2026'},
+    {file: 'brief_caxias_2026-03-20.md', client: 'DM2 Caxias', date: '20/03/2026'},
+    {file: 'brief_emagrecentro-cariacica_2026-03-20.md', client: 'Emagrecentro Cariacica', date: '20/03/2026'},
+    {file: 'brief_jundiai_2026-03-20.md', client: 'DM2 Jundiaí', date: '20/03/2026'},
+    {file: 'brief_linhares_2026-03-20.md', client: 'DM2 Linhares', date: '20/03/2026'},
+    {file: 'brief_parauapebas_2026-03-20.md', client: 'DM2 Parauapebas', date: '20/03/2026'},
+    {file: 'brief_rio-preto_2026-03-20.md', client: 'DM2 Rio Preto', date: '20/03/2026'},
+  ];
+  briefs.forEach(function(b) {
+    var a = document.createElement('a');
+    a.className = 'brief';
+    a.href = b.file;
+    a.target = '_blank';
+    a.innerHTML = '<span class="brief-icon">🎨</span><div class="brief-info"><div class="brief-name">' + b.client + '</div><div class="brief-meta">Gerado em ' + b.date + ' pelo Design Agent</div></div><span class="brief-badge">Brief</span>';
+    container.appendChild(a);
+  });
+});
+</script>
+</head>
+<body>
+<div class="container">
+  <h1>Briefs de Criativos</h1>
+  <p class="sub">Briefs gerados automaticamente pelo Design Agent com base na performance dos anúncios</p>
+  <div id="briefList"></div>
+  <a class="back" href="../">← Voltar pros Documentos</a>
+</div>
+</body>
+</html>
