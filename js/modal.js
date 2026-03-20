@@ -322,7 +322,7 @@ function bindDetailEvents(cardId) {
   document.getElementById('clAddBtn').addEventListener('click', async function() {
     var input = document.getElementById('clNewItem');
     var text = input.value.trim();
-    if (!text) return;
+    if (!text) { input.focus(); input.style.borderColor = '#e74c3c'; setTimeout(function(){ input.style.borderColor = ''; }, 1500); return; }
     var count = document.querySelectorAll('.cl-item').length;
     var item = await addChecklistItem(cardId, text, (count + 1) * 10);
     input.value = '';
@@ -369,7 +369,7 @@ function bindDetailEvents(cardId) {
   // Links: add
   document.getElementById('lkAddBtn').addEventListener('click', async function() {
     var url = document.getElementById('lkUrl').value.trim();
-    if (!url) return;
+    if (!url) { document.getElementById('lkUrl').focus(); document.getElementById('lkUrl').style.borderColor = '#e74c3c'; setTimeout(function(){ document.getElementById('lkUrl').style.borderColor = ''; }, 1500); return; }
     var label = document.getElementById('lkLabel').value.trim() || url;
     var link = await addLink(cardId, url, label);
     document.getElementById('lkUrl').value = '';
@@ -387,17 +387,27 @@ function bindDetailEvents(cardId) {
 
   // Comments: add
   document.getElementById('cmAddBtn').addEventListener('click', async function() {
-    var text = document.getElementById('cmText').value.trim();
-    if (!text) return;
-    var comment = await addComment(cardId, text);
-    document.getElementById('cmText').value = '';
-    var a = comment.author || {};
-    var time = new Date(comment.created_at);
-    var timeStr = time.toLocaleDateString('pt-BR') + ' ' + time.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
-    var div = document.createElement('div');
-    div.className = 'cm-item';
-    div.innerHTML = '<div class="cm-header"><span class="avatar-sm" style="background:' + (a.avatar_color || '#999') + '">' + (a.name || '?').charAt(0) + '</span><strong>' + escapeHtml(a.name || 'Voce') + '</strong><span class="cm-time">' + timeStr + '</span></div><div class="cm-text">' + escapeHtml(text) + '</div>';
-    document.getElementById('commentItems').appendChild(div);
+    var textarea = document.getElementById('cmText');
+    var text = textarea.value.trim();
+    if (!text) { textarea.focus(); textarea.style.borderColor = '#e74c3c'; setTimeout(function(){ textarea.style.borderColor = ''; }, 1500); return; }
+    var btn = this;
+    btn.disabled = true; btn.textContent = 'Enviando...';
+    try {
+      var comment = await addComment(cardId, text);
+      textarea.value = '';
+      var a = comment.author || {};
+      var time = new Date(comment.created_at);
+      var timeStr = time.toLocaleDateString('pt-BR') + ' ' + time.toLocaleTimeString('pt-BR', {hour:'2-digit',minute:'2-digit'});
+      var div = document.createElement('div');
+      div.className = 'cm-item cm-new';
+      div.innerHTML = '<div class="cm-header"><span class="avatar-sm" style="background:' + (a.avatar_color || '#999') + '">' + (a.name || '?').charAt(0) + '</span><strong>' + escapeHtml(a.name || 'Voce') + '</strong><span class="cm-time">' + timeStr + '</span></div><div class="cm-text">' + escapeHtml(text) + '</div>';
+      document.getElementById('commentItems').appendChild(div);
+      // Update count
+      var countEl = document.querySelector('.dp-section-header .cl-count');
+      if (countEl) { var n = document.querySelectorAll('.cm-item').length; }
+      div.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    } catch(err) { alert('Erro ao comentar: ' + err.message); }
+    btn.disabled = false; btn.textContent = 'Enviar';
   });
 
   // Enter to send comment (Ctrl+Enter)
