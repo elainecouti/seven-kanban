@@ -1,5 +1,5 @@
 /* Seven Midas Kanban — Modern Design */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Outfit:wght@700;800&display=swap');
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -54,13 +54,24 @@ body {
 }
 
 .logo {
-  font-size: 17px;
-  font-weight: 900;
+  font-family: 'Outfit', sans-serif;
+  font-size: 20px;
+  font-weight: 800;
   color: white;
   white-space: nowrap;
-  letter-spacing: -0.3px;
+  letter-spacing: -0.5px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
-.logo span { color: #a78bfa; }
+.logo svg { width: 28px; height: 28px; }
+.logo .midas {
+  font-weight: 700;
+  background: linear-gradient(135deg, #00E87B, #00B8D4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
 
 .filters {
   display: flex;
