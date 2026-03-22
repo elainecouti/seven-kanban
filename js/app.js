@@ -133,6 +133,17 @@ async function finishInit() {
     }
   });
 
+  // Clients Panel toggle
+  document.getElementById('btnClientsPanel').addEventListener('click', function() {
+    if (currentView === 'clients') {
+      currentView = 'board';
+      showBoardView();
+    } else {
+      currentView = 'clients';
+      showClientsPanelView();
+    }
+  });
+
   // Mobile tabs
   function activateMobileTab(colKey) {
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.column === colKey); });

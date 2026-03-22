@@ -120,8 +120,12 @@ function showBoardView() {
   document.getElementById('calendarView').style.display = 'none';
   var dashboard = document.getElementById('dashboardView');
   if (dashboard) dashboard.style.display = 'none';
+  var clientsPanel = document.getElementById('clientsPanelView');
+  if (clientsPanel) clientsPanel.style.display = 'none';
   document.getElementById('btnCalendar').classList.remove('active');
   document.getElementById('btnDashboard').classList.remove('active');
+  var btnClients = document.getElementById('btnClientsPanel');
+  if (btnClients) btnClients.classList.remove('active');
   document.querySelector('.board').style.display = '';
   // Restore tabs on mobile
   if (window.innerWidth <= 768) {
