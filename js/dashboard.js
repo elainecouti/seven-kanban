@@ -137,7 +137,11 @@ function showDashboardView() {
   document.querySelector('.tabs').style.display = 'none';
   document.getElementById('calendarView').style.display = 'none';
   document.getElementById('dashboardView').style.display = 'block';
+  var cp = document.getElementById('clientsPanelView');
+  if (cp) cp.style.display = 'none';
   document.getElementById('btnDashboard').classList.add('active');
   document.getElementById('btnCalendar').classList.remove('active');
+  var bc = document.getElementById('btnClientsPanel');
+  if (bc) bc.classList.remove('active');
   renderDashboard();
 }

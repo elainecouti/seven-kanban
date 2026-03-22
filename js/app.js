@@ -15,6 +15,7 @@ async function loadBoard() {
   // Re-render current view if not board
   if (currentView === 'calendar') renderCalendar();
   else if (currentView === 'dashboard') renderDashboard();
+  else if (currentView === 'clients') renderClientsPanel();
 }
 
 async function autoArchiveCompleted() {
