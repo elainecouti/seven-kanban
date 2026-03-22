@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Publicos e Segmentacoes — Seven Midas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0b0e;color:#e8eaed;padding:40px 20px}
+.c{max-width:800px;margin:0 auto}
+h1{font-size:24px;font-weight:800;margin-bottom:4px}
+h2{font-size:18px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid #1e1f23}
+h3{font-size:15px;font-weight:700;color:#00e5c7;margin:20px 0 8px}
+.sub{color:#7a7a7a;font-size:13px;margin-bottom:32px}
+.card{background:#141518;border-radius:12px;padding:20px;margin-bottom:12px;border-left:4px solid #4d8eff}
+.card-red{border-color:#ff4d6a}
+.card-green{border-color:#00d68f}
+.title{font-size:15px;font-weight:700;margin-bottom:8px}
+.detail{font-size:13px;color:#b0b0b0;line-height:1.6}
+.detail strong{color:#e8eaed}
+ul{list-style:none;padding:0;margin:8px 0}
+li{padding:5px 0;padding-left:16px;position:relative;font-size:13px;color:#ccc}
+li:before{content:"→";position:absolute;left:0;color:#00e5c7}
+.interests{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0}
+.int{font-size:11px;background:#1e1f23;padding:4px 10px;border-radius:6px;color:#4d8eff}
+.warn{background:#1a1b1f;padding:12px 16px;border-radius:8px;margin:12px 0;font-size:12px;color:#ff4d6a;border:1px solid #333;font-weight:700}
+.tip{background:#1a1b1f;padding:12px 16px;border-radius:8px;margin:12px 0;font-size:12px;color:#ffaa2c;border:1px solid #333}
+.back{display:inline-block;margin-top:32px;color:#00e5c7;font-size:13px;font-weight:600;text-decoration:none}
+</style></head><body>
+<div class="c">
+<h1>👥 Publicos e Segmentacoes</h1>
+<p class="sub">Todas as segmentacoes usadas por tipo de cliente. Referencia pra criar e expandir publicos.</p>
+
+<h2>DM2 — Publicos Padrao</h2>
+
+<h3>Interesses Saude</h3>
+<div class="interests">
+<span class="int">Diabetes</span><span class="int">Endocrinologia</span><span class="int">Saude</span><span class="int">Nutricao</span><span class="int">Emagrecimento</span><span class="int">Dieta</span><span class="int">Exercicio fisico</span><span class="int">Medicina</span>
+</div>
+
+<h3>Interesses Financeiros (proxy de renda)</h3>
+<div class="interests">
+<span class="int">Bank of America</span><span class="int">Deutsche Bank</span><span class="int">Citibank</span><span class="int">Morgan Stanley</span><span class="int">JPMorgan Chase</span><span class="int">Investimento</span><span class="int">American Express</span><span class="int">Negocios</span><span class="int">Goldman Sachs</span><span class="int">Credit Suisse</span>
+</div>
+
+<h3>Comportamento</h3>
+<div class="interests">
+<span class="int">Frequent international travelers</span><span class="int">Viagem em 1a classe</span><span class="int">Classe executiva</span>
+</div>
+
+<div class="tip">Esses interesses financeiros/viagem servem como filtro de renda. DM2 custa R$5.500-17.000 — precisa de publico com poder aquisitivo.</div>
+
+<h3>Faixa Etaria</h3>
+<div class="card">
+<div class="detail">
+<ul>
+<li><strong>Padrao:</strong> 35+ (homens) / 35+ (mulheres)</li>
+<li><strong>Disfuncao eretil:</strong> 40+ (so homens)</li>
+<li><strong>Vista/neuropatia:</strong> 45+ (complicacoes tardias)</li>
+<li><strong>Mae (filha buscando):</strong> 30+ (mulheres mais jovens)</li>
+</ul>
+Testar por unidade — algumas cidades convertem melhor em 40+, outras em 35+.
+</div></div>
+
+<h3>Geografico</h3>
+<div class="card">
+<div class="detail">
+<ul>
+<li><strong>Raio:</strong> 15km da clinica (padrao), expandir ate 40km se necessario</li>
+<li><strong>CEPs nobres:</strong> bairros de renda alta da cidade</li>
+<li><strong>Cidades vizinhas:</strong> incluir se nao tem clinica DM2 na regiao</li>
+<li><strong>Serra/interior:</strong> algumas unidades (ex: Vitoria) incluem cidades da serra no targeting</li>
+</ul>
+</div></div>
+
+<h2>Custom Audiences</h2>
+
+<div class="card card-green">
+<div class="title">Lookalike (ordem de prioridade)</div>
+<div class="detail">
+<ul>
+<li><strong>1% dos leads que AGENDARAM</strong> — melhor qualidade</li>
+<li><strong>2% dos que COMPARECERAM</strong> — mais volume, boa qualidade</li>
+<li><strong>3% dos CLIENTES (em tratamento)</strong> — maximo volume</li>
+</ul>
+</div></div>
+
+<div class="tip">NUNCA fazer lookalike de todos os leads. Fazer dos que agendaram. Lead barato que nao agenda nao serve como semente.</div>
+
+<div class="card">
+<div class="title">Retargeting</div>
+<div class="detail">
+<ul>
+<li><strong>Visitou LP ultimos 30 dias</strong> — ja demonstrou interesse, nao converteu</li>
+<li><strong>Assistiu 50%+ do video</strong> — engajou com o conteudo</li>
+<li><strong>Engajou com Instagram 90 dias</strong> — conhece a marca</li>
+<li><strong>Leads que NAO agendaram</strong> — reativacao (mensagem diferente)</li>
+<li><strong>Leads que agendaram mas NAO compareceram</strong> — lembrete/reagendamento</li>
+</ul>
+</div></div>
+
+<h2>Exclusoes Obrigatorias</h2>
+
+<div class="card card-red">
+<div class="title">Sempre excluir desses publicos:</div>
+<div class="detail">
+<ul>
+<li>Clientes ativos (em tratamento)</li>
+<li>Quem agendou nos ultimos 30 dias</li>
+<li>Funcionarios da clinica</li>
+<li>Menores de 30 anos</li>
+<li>Quem ja comprou (e-commerce/Workshop)</li>
+</ul>
+</div></div>
+
+<h2>Regras Fixas</h2>
+
+<div class="warn">NUNCA misturar homens e mulheres no mesmo ad set</div>
+
+<div class="card">
+<div class="detail">
+<ul>
+<li><strong>Ad set Homens:</strong> criativos H + criativos A (ambos)</li>
+<li><strong>Ad set Mulheres:</strong> criativos M + criativos A (ambos). Sem criativos H.</li>
+<li><strong>CTA Homens:</strong> "Fale com um especialista"</li>
+<li><strong>CTA Mulheres:</strong> "Fale com uma especialista"</li>
+<li><strong>Advantage+ OFF</strong> em campanhas de conversao</li>
+<li><strong>Dar 3-5 dias</strong> pro novo publico sair do learning phase</li>
+<li><strong>Se nao performar em 5 dias com gasto >R$100:</strong> pausar</li>
+</ul>
+</div></div>
+
+<h2>Publicos por Outros Clientes</h2>
+
+<div class="card">
+<div class="title">Max Outlet (E-commerce)</div>
+<div class="detail">
+<ul>
+<li>Interesses: moda, compras online, outlets, marcas</li>
+<li>Lookalike de compradores</li>
+<li>Retargeting: visitou site, adicionou carrinho</li>
+</ul>
+</div></div>
+
+<div class="card">
+<div class="title">Workshop (Diego Vieira)</div>
+<div class="detail">
+<ul>
+<li>Interesses: empreendedorismo, negocios, marketing</li>
+<li>Lookalike de compradores Monetizze</li>
+<li>Retargeting: visitou LP, initiate checkout</li>
+</ul>
+</div></div>
+
+<div class="card">
+<div class="title">Medicos (perfil)</div>
+<div class="detail">
+<ul>
+<li>Broad ou interesses amplos de saude</li>
+<li>Geo: cidade do consultorio</li>
+<li>Foco em alcance, nao conversao</li>
+</ul>
+</div></div>
+
+<a class="back" href="index.html">← Voltar</a>
+</div></body></html>
