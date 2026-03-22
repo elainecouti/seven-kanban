@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reguas de Decisao — Seven Midas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0b0e;color:#e8eaed;padding:40px 20px}
+.c{max-width:900px;margin:0 auto}
+h1{font-size:24px;font-weight:800;margin-bottom:4px}
+h2{font-size:18px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid #1e1f23}
+.sub{color:#7a7a7a;font-size:13px;margin-bottom:32px}
+table{width:100%;border-collapse:collapse;margin:16px 0;background:#141518;border-radius:12px;overflow:hidden}
+th{text-align:left;padding:12px 16px;background:#1a1b1f;font-size:11px;color:#7a7a7a;text-transform:uppercase;letter-spacing:.5px}
+td{padding:12px 16px;border-bottom:1px solid #1e1f23;font-size:13px}
+tr:last-child td{border-bottom:none}
+.g{color:#00d68f;font-weight:700}.y{color:#ffaa2c;font-weight:700}.r{color:#ff4d6a;font-weight:700}
+.highlight{background:#1a1b1f;padding:20px;border-radius:12px;margin:20px 0;border:2px solid #ffaa2c}
+.highlight p{font-size:15px;font-weight:700;line-height:1.6}
+.highlight .g-text{color:#00d68f}.highlight .r-text{color:#ff4d6a}
+.model{background:#141518;border-radius:12px;padding:20px;margin:16px 0}
+.model h3{font-size:15px;font-weight:700;color:#00e5c7;margin-bottom:12px}
+.model p{font-size:13px;color:#b0b0b0;line-height:1.6;margin-bottom:8px}
+.model strong{color:#e8eaed}
+.back{display:inline-block;margin-top:32px;color:#00e5c7;font-size:13px;font-weight:600;text-decoration:none}
+</style></head><body>
+<div class="c">
+<h1>⚖️ Reguas de Decisao</h1>
+<p class="sub">Thresholds de performance por metrica e tipo de cliente. A base de toda decisao operacional.</p>
+
+<div class="highlight">
+<p>REGRA DE OURO:<br>
+<span class="g-text">CPL caro + funil saudavel (agendamento >20%) = MANTER ou ESCALAR</span><br>
+<span class="r-text">CPL barato + funil quebrado (agendamento <15%) = problema e do SDR, nao do trafego</span><br><br>
+A decisao de pausar/escalar NUNCA pode ser so pelo CPL. Sempre cruzar com taxa de agendamento e custo por agendamento.</p>
+</div>
+
+<h2>Clinicas DM2 (26 unidades)</h2>
+
+<table>
+<tr><th>Metrica</th><th class="g">Bom</th><th class="y">Atencao</th><th class="r">Perigo</th></tr>
+<tr><td>CPL</td><td class="g">< R$15</td><td class="y">R$15 - R$18</td><td class="r">> R$19</td></tr>
+<tr><td>Taxa Agendamento</td><td class="g">> 20%</td><td class="y">15% - 20%</td><td class="r">< 15%</td></tr>
+<tr><td>Taxa Comparecimento</td><td class="g">> 50%</td><td class="y">40% - 50%</td><td class="r">< 40%</td></tr>
+<tr><td>Taxa Venda</td><td class="g">> 40%</td><td class="y">30% - 40%</td><td class="r">< 30%</td></tr>
+<tr><td>Custo / Agendamento</td><td class="g">< R$100</td><td class="y">R$100 - R$150</td><td class="r">> R$150</td></tr>
+<tr><td>Tempo Resposta SDR</td><td class="g">< 15 min</td><td class="y">15 - 30 min</td><td class="r">> 30 min</td></tr>
+<tr><td>CAC (Custo Aquisicao)</td><td class="g">< R$500</td><td class="y">R$500 - R$800</td><td class="r">> R$800</td></tr>
+<tr><td>CTR</td><td class="g">> 1.5%</td><td class="y">1.0% - 1.5%</td><td class="r">< 1.0%</td></tr>
+<tr><td>CPC</td><td class="g">< R$3</td><td class="y">R$3 - R$5</td><td class="r">> R$5</td></tr>
+<tr><td>Frequencia</td><td class="g">< 2.5</td><td class="y">2.5 - 3.5</td><td class="r">> 3.5</td></tr>
+</table>
+
+<div class="model">
+<h3>Modelo de Negocio DM2</h3>
+<p><strong>Ticket:</strong> R$5.500 a R$17.000 (pacote 3, 6 ou 9 meses)</p>
+<p><strong>Consulta avaliativa:</strong> R$150 (algumas unidades R$200)</p>
+<p><strong>Conversao lead → venda:</strong> 5-6% ao mes (inclui leads novos + reativados + follow-up)</p>
+<p><strong>Mesmo CPL R$25 com conversao 5% = CAC R$500 = 9% do ticket minimo.</strong> Isso e saudavel.</p>
+</div>
+
+<h2>Emagrecentro (3 unidades) + CDT</h2>
+
+<table>
+<tr><th>Metrica</th><th class="g">Bom</th><th class="y">Atencao</th><th class="r">Perigo</th></tr>
+<tr><td>CPL</td><td class="g">< R$15</td><td class="y">R$15 - R$25</td><td class="r">> R$25</td></tr>
+<tr><td>CTR</td><td class="g">> 1.2%</td><td class="y">0.8% - 1.2%</td><td class="r">< 0.8%</td></tr>
+<tr><td>Frequencia</td><td class="g">< 3.0</td><td class="y">3.0 - 4.0</td><td class="r">> 4.0</td></tr>
+</table>
+
+<h2>Max Outlet (E-commerce)</h2>
+
+<table>
+<tr><th>Metrica</th><th class="g">Bom</th><th class="y">Atencao</th><th class="r">Perigo</th></tr>
+<tr><td>ROAS</td><td class="g">> 4x</td><td class="y">2x - 4x</td><td class="r">< 2x</td></tr>
+<tr><td>CPA (Custo por Compra)</td><td class="g">< R$50</td><td class="y">R$50 - R$80</td><td class="r">> R$80</td></tr>
+<tr><td>Taxa Checkout</td><td class="g">> 40%</td><td class="y">25% - 40%</td><td class="r">< 25%</td></tr>
+<tr><td>CTR</td><td class="g">> 1.2%</td><td class="y">0.8% - 1.2%</td><td class="r">< 0.8%</td></tr>
+</table>
+
+<div class="model">
+<p><strong>IMPORTANTE:</strong> Nao misturar objetivos. WPP = conversas. Trafego = seguidores. Vendas = compras.</p>
+</div>
+
+<h2>Workshop Empresarial (Diego Vieira)</h2>
+
+<table>
+<tr><th>Metrica</th><th class="g">Bom</th><th class="y">Atencao</th><th class="r">Perigo</th></tr>
+<tr><td>ROAS</td><td class="g">> 3x</td><td class="y">1.5x - 3x</td><td class="r">< 1.5x</td></tr>
+<tr><td>CPA</td><td class="g">< 30% ticket</td><td class="y">30-50% ticket</td><td class="r">> 50% ticket</td></tr>
+<tr><td>Taxa Initiate → Compra</td><td class="g">> 60%</td><td class="y">40% - 60%</td><td class="r">< 40%</td></tr>
+</table>
+
+<div class="model">
+<p><strong>Funil:</strong> Anuncio → LP → Initiate Checkout → Compra via Monetizze → Postback → Pixel Purchase</p>
+</div>
+
+<h2>Trafego Perfil (Medicos)</h2>
+
+<table>
+<tr><th>Metrica</th><th class="g">Bom</th><th class="y">Atencao</th><th class="r">Perigo</th></tr>
+<tr><td>CPC</td><td class="g">< R$2</td><td class="y">R$2 - R$3</td><td class="r">> R$3</td></tr>
+<tr><td>CTR</td><td class="g">> 0.8%</td><td class="y">0.5% - 0.8%</td><td class="r">< 0.5%</td></tr>
+<tr><td>Frequencia</td><td class="g">< 4.0</td><td class="y">4.0 - 5.0</td><td class="r">> 5.0</td></tr>
+</table>
+
+<div class="model">
+<p><strong>NAO cobrar leads/conversoes desses clientes.</strong> Objetivo e visitas ao perfil e crescimento. Dra. Alessandra, Dra. Chris, Dr. Leandro, Dra. Michelle, Fisio Guilherme.</p>
+</div>
+
+<a class="back" href="index.html">← Voltar</a>
+</div></body></html>

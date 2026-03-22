@@ -3,76 +3,127 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Seven Midas — Documentos</title>
+<title>Seven Midas — Central de Documentos</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
   *{margin:0;padding:0;box-sizing:border-box}
-  body{font-family:'Inter',sans-serif;background:#f4f5f7;color:#1e1e2e;padding:40px 20px}
-  .container{max-width:700px;margin:0 auto}
-  h1{font-size:24px;font-weight:800;margin-bottom:8px;letter-spacing:-0.5px}
-  .sub{color:#9ca3b4;font-size:14px;margin-bottom:32px}
-  .doc{display:flex;align-items:center;gap:16px;background:white;border-radius:12px;padding:20px;margin-bottom:12px;text-decoration:none;color:#1e1e2e;box-shadow:0 2px 8px rgba(0,0,0,0.04);transition:all 0.2s}
-  .doc:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
-  .doc-icon{font-size:28px;flex-shrink:0}
+  body{font-family:'Inter',sans-serif;background:#0a0b0e;color:#e8eaed;padding:40px 20px}
+  .container{max-width:800px;margin:0 auto}
+  h1{font-size:28px;font-weight:800;margin-bottom:4px;letter-spacing:-0.5px}
+  .sub{color:#7a7a7a;font-size:14px;margin-bottom:32px}
+  h2{font-size:16px;font-weight:700;color:#7a7a7a;text-transform:uppercase;letter-spacing:1px;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid #1e1f23}
+  .doc{display:flex;align-items:center;gap:16px;background:#141518;border-radius:12px;padding:18px 20px;margin-bottom:10px;text-decoration:none;color:#e8eaed;transition:all 0.2s;border:1px solid #1e1f23}
+  .doc:hover{transform:translateY(-2px);border-color:#333;background:#1a1b1f}
+  .doc-icon{font-size:24px;flex-shrink:0}
   .doc-info{flex:1}
-  .doc-name{font-size:16px;font-weight:700;margin-bottom:4px}
-  .doc-desc{font-size:13px;color:#9ca3b4;line-height:1.4}
-  .doc-badge{font-size:10px;font-weight:700;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px;flex-shrink:0}
-  .badge-copy{background:#ede9fe;color:#7c3aed}
-  .badge-csv{background:#d1fae5;color:#059669}
-  .badge-ops{background:#fef3c7;color:#d97706}
-  .back{display:inline-block;margin-top:24px;color:#7c3aed;font-size:13px;font-weight:600;text-decoration:none}
+  .doc-name{font-size:15px;font-weight:700;margin-bottom:3px}
+  .doc-desc{font-size:12px;color:#7a7a7a;line-height:1.4}
+  .badge{font-size:9px;font-weight:700;padding:4px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px;flex-shrink:0}
+  .b-ops{background:rgba(255,170,44,.12);color:#ffaa2c}
+  .b-strategy{background:rgba(0,229,199,.1);color:#00e5c7}
+  .b-clients{background:rgba(77,142,255,.12);color:#4d8eff}
+  .b-copy{background:rgba(168,85,247,.12);color:#a855f7}
+  .b-design{background:rgba(255,77,106,.1);color:#ff4d6a}
+  .b-intel{background:rgba(0,214,143,.1);color:#00d68f}
+  .back{display:inline-block;margin-top:32px;color:#00e5c7;font-size:13px;font-weight:600;text-decoration:none}
   .back:hover{text-decoration:underline}
+  .logo{color:#00e5c7;font-weight:800}
 </style>
 </head>
 <body>
 <div class="container">
-  <h1>Documentos — Seven Midas</h1>
-  <p class="sub">Briefings, copies e playbooks compartilhados com a equipe</p>
+  <h1><span class="logo">seven</span>midas — Central de Documentos</h1>
+  <p class="sub">Wiki operacional da agencia. POPs, estrategia, clientes e automacoes.</p>
+
+  <h2>Clientes</h2>
+
+  <a class="doc" href="clientes/">
+    <span class="doc-icon">🏥</span>
+    <div class="doc-info">
+      <div class="doc-name">Fichas de Clientes</div>
+      <div class="doc-desc">Dados de cada cliente: conta Meta, pixel, ZapClinic, ticket, KPIs, particularidades. 35+ clientes.</div>
+    </div>
+    <span class="badge b-clients">Clientes</span>
+  </a>
+
+  <h2>Operacao (POPs)</h2>
+
+  <a class="doc" href="pops/">
+    <span class="doc-icon">📋</span>
+    <div class="doc-info">
+      <div class="doc-name">Procedimentos Operacionais</div>
+      <div class="doc-desc">Subir campanha, pausar/escalar, trocar criativo, expandir publico, troubleshooting, interpretar alertas.</div>
+    </div>
+    <span class="badge b-ops">POPs</span>
+  </a>
+
+  <a class="doc" href="PLAYBOOK_OPERACIONAL.md" target="_blank">
+    <span class="doc-icon">📖</span>
+    <div class="doc-info">
+      <div class="doc-name">Playbook Operacional Completo</div>
+      <div class="doc-desc">KPIs por tipo de cliente, thresholds, processos diarios/semanais/mensais, regras de automacao.</div>
+    </div>
+    <span class="badge b-ops">Ops</span>
+  </a>
+
+  <h2>Estrategia</h2>
+
+  <a class="doc" href="estrategia/">
+    <span class="doc-icon">🎯</span>
+    <div class="doc-info">
+      <div class="doc-name">Reguas de Decisao, Angulos e Publicos</div>
+      <div class="doc-desc">Quando pausar/escalar, banco de 11 angulos DM2, segmentacoes e publicos por tipo de cliente.</div>
+    </div>
+    <span class="badge b-strategy">Estrategia</span>
+  </a>
+
+  <h2>Copies e Criativos</h2>
 
   <a class="doc" href="copy_variations_dm2.md" target="_blank">
     <span class="doc-icon">📝</span>
     <div class="doc-info">
-      <div class="doc-name">Variações de Copy — DM2</div>
-      <div class="doc-desc">40 headlines, 10 textos primários, 8 CTAs, 5 combos prontos. Separados por ângulo: dor, resultado, urgência, curiosidade, prova social.</div>
+      <div class="doc-name">Variacoes de Copy — DM2</div>
+      <div class="doc-desc">40 headlines, 10 textos primarios, 8 CTAs, 5 combos prontos. Por angulo: dor, resultado, urgencia, curiosidade, prova social.</div>
     </div>
-    <span class="doc-badge badge-copy">Copy</span>
+    <span class="badge b-copy">Copy</span>
   </a>
 
   <a class="doc" href="copy_variations_dm2_humanizado.csv" download>
     <span class="doc-icon">📊</span>
     <div class="doc-info">
-      <div class="doc-name">CSV de Copies Humanizados — Importar no Meta Ads</div>
-      <div class="doc-desc">30 variações humanizadas: linguagem natural, números por extenso, tom conversacional. Com UTMs prontos.</div>
+      <div class="doc-name">CSV de Copies Humanizados</div>
+      <div class="doc-desc">30 variacoes humanizadas prontas pra importar no Meta Ads.</div>
     </div>
-    <span class="doc-badge badge-csv">CSV</span>
-  </a>
-
-  <a class="doc" href="copy_variations_dm2.csv" download>
-    <span class="doc-icon">📄</span>
-    <div class="doc-info">
-      <div class="doc-name">CSV Original (antes da humanização)</div>
-      <div class="doc-desc">Versão original pra comparação.</div>
-    </div>
-    <span class="doc-badge badge-csv">CSV</span>
-  </a>
-
-  <a class="doc" href="PLAYBOOK_OPERACIONAL.md" target="_blank">
-    <span class="doc-icon">📋</span>
-    <div class="doc-info">
-      <div class="doc-name">Playbook Operacional</div>
-      <div class="doc-desc">KPIs por tipo de cliente, thresholds de alerta, processos diários/semanais/mensais, regras de atribuição.</div>
-    </div>
-    <span class="doc-badge badge-ops">Ops</span>
+    <span class="badge b-copy">CSV</span>
   </a>
 
   <a class="doc" href="briefs/">
     <span class="doc-icon">🎨</span>
     <div class="doc-info">
-      <div class="doc-name">Briefs de Criativos (8 clientes)</div>
-      <div class="doc-desc">Briefs gerados pelo Design Agent: criativos fadigados, referências de top performers, formato recomendado e prazo pro designer.</div>
+      <div class="doc-name">Briefs de Criativos</div>
+      <div class="doc-desc">Briefs gerados pelo Design Agent: criativos fadigados, referencias, formato e prazo pro designer.</div>
     </div>
-    <span class="doc-badge" style="background:#fef0ed;color:#e17055">Design</span>
+    <span class="badge b-design">Design</span>
+  </a>
+
+  <h2>Inteligencia</h2>
+
+  <a class="doc" href="https://intel.sevenmidas.com.br" target="_blank">
+    <span class="doc-icon">🧠</span>
+    <div class="doc-info">
+      <div class="doc-name">Relatorios Intelligence Engine</div>
+      <div class="doc-desc">Diagnosticos automaticos com Claude AI: problemas detectados, hipoteses, acoes e verificacao de resultados.</div>
+    </div>
+    <span class="badge b-intel">Intel</span>
+  </a>
+
+  <a class="doc" href="https://kanban.sevenmidas.com.br" target="_blank">
+    <span class="doc-icon">📌</span>
+    <div class="doc-info">
+      <div class="doc-name">Kanban — Tarefas</div>
+      <div class="doc-desc">Board operacional com cards automaticos, checklists e links pros relatorios detalhados.</div>
+    </div>
+    <span class="badge b-ops">Kanban</span>
   </a>
 
   <a class="back" href="../">← Voltar pro Kanban</a>

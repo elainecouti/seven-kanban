@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POP: Interpretar Alertas — Seven Midas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0b0e;color:#e8eaed;padding:40px 20px}
+.c{max-width:800px;margin:0 auto}
+h1{font-size:24px;font-weight:800;margin-bottom:4px}
+h2{font-size:18px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid #1e1f23}
+.sub{color:#7a7a7a;font-size:13px;margin-bottom:32px}
+.grav{background:#141518;border-radius:12px;padding:20px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start}
+.grav-icon{font-size:28px;flex-shrink:0}
+.grav-info{flex:1}
+.grav-title{font-size:15px;font-weight:700;margin-bottom:4px}
+.grav-desc{font-size:13px;color:#b0b0b0;line-height:1.5}
+.grav-prazo{font-size:12px;font-weight:700;margin-top:6px}
+.red{color:#ff4d6a}.yellow{color:#ffaa2c}.orange{color:#ff8c00}.green{color:#00d68f}
+.card-example{background:#141518;border-radius:12px;padding:20px;margin:16px 0;border:1px solid #1e1f23}
+.card-example h4{font-size:14px;margin-bottom:12px;color:#00e5c7}
+.card-example pre{font-size:12px;color:#b0b0b0;line-height:1.6;white-space:pre-wrap}
+.steps{list-style:none;padding:0;counter-reset:step}
+.steps li{padding:10px 0 10px 36px;position:relative;font-size:14px;color:#ccc;line-height:1.5;counter-increment:step;border-bottom:1px solid #1e1f23}
+.steps li:before{content:counter(step);position:absolute;left:0;width:24px;height:24px;background:#1e1f23;border-radius:50%;text-align:center;line-height:24px;font-size:12px;font-weight:700;color:#00e5c7}
+.steps li:last-child{border-bottom:none}
+.highlight{background:#1a1b1f;padding:14px 18px;border-radius:10px;margin:16px 0;border:1px solid #333;font-size:13px;line-height:1.6}
+.back{display:inline-block;margin-top:32px;color:#00e5c7;font-size:13px;font-weight:600;text-decoration:none}
+</style></head><body>
+<div class="c">
+<h1>🧠 Como Interpretar os Alertas</h1>
+<p class="sub">O Intelligence Engine analisa todas as contas e gera alertas com diagnostico, hipoteses e acoes. Entenda como ler e agir.</p>
+
+<h2>Niveis de Gravidade</h2>
+
+<div class="grav">
+<span class="grav-icon">🔴</span>
+<div class="grav-info">
+<div class="grav-title red">CRITICO</div>
+<div class="grav-desc">Algo parou de funcionar. Conta suspensa, saldo zerou, zero leads com gasto alto, campanha reprovada.</div>
+<div class="grav-prazo red">Acao em ate 2 HORAS</div>
+</div>
+</div>
+
+<div class="grav">
+<span class="grav-icon">🟡</span>
+<div class="grav-info">
+<div class="grav-title yellow">URGENTE</div>
+<div class="grav-desc">Performance caindo rapido. CPL spike, saldo acabando, criativo fadigado, CTR despencando.</div>
+<div class="grav-prazo yellow">Acao em ate 24 HORAS</div>
+</div>
+</div>
+
+<div class="grav">
+<span class="grav-icon">🟠</span>
+<div class="grav-info">
+<div class="grav-title orange">ATENCAO</div>
+<div class="grav-desc">Tendencia negativa. Anuncio gastando sem converter, saldo baixo, sem criativo novo ha 14+ dias.</div>
+<div class="grav-prazo orange">Acao em ate 48 HORAS</div>
+</div>
+</div>
+
+<div class="grav">
+<span class="grav-icon">🟢</span>
+<div class="grav-info">
+<div class="grav-title green">OTIMIZACAO</div>
+<div class="grav-desc">Oportunidade de melhoria. Anuncio top pra escalar, teste de angulo, expandir publico.</div>
+<div class="grav-prazo green">Acao na SEMANA</div>
+</div>
+</div>
+
+<h2>Como Ler o Card no Kanban</h2>
+
+<div class="card-example">
+<h4>Exemplo de card:</h4>
+<pre>🔴 Vitoria — 3 problemas
+
+🔴 Conta Suspensa: Verificar cartao/pagamento
+🟠 Anuncio Ruim: ads glicada — R$54 gastos, 0 leads
+🟢 Escalar Anuncio: ads pancreas — CPL R$7, 8 leads
+
+📅 Verificar: 2026-03-25
+📎 Ver relatorio detalhado no link abaixo</pre>
+</div>
+
+<div class="highlight">
+<strong>Cada card tem:</strong><br>
+• <strong>Titulo:</strong> gravidade mais alta + unidade + numero de problemas<br>
+• <strong>Bullets:</strong> cada problema com emoji de gravidade + resumo curto<br>
+• <strong>Checklist:</strong> separado em ⚡ PRIORIDADE (urgente) e 💡 SUGESTOES (melhoria)<br>
+• <strong>Link:</strong> relatorio HTML detalhado com diagnostico completo, hipoteses e acoes<br>
+• <strong>Data de verificacao:</strong> quando checar se a acao deu resultado
+</div>
+
+<h2>O que Fazer Quando Receber um Alerta</h2>
+
+<ol class="steps">
+<li><strong>Ler o card completo</strong> — entender todos os problemas da unidade antes de agir</li>
+<li><strong>Abrir o relatorio detalhado</strong> (link no card) — ver diagnostico, hipoteses e dados</li>
+<li><strong>Executar as acoes da checklist ⚡ PRIORIDADE</strong> — fazer primeiro o que e urgente</li>
+<li><strong>Marcar cada acao como feita</strong> no checklist do kanban</li>
+<li><strong>Depois das prioridades:</strong> avaliar as 💡 SUGESTOES e executar o que fizer sentido</li>
+<li><strong>Mover o card pra "Fazendo"</strong> enquanto trabalha nele</li>
+<li><strong>Quando terminar:</strong> mover pra "Concluido"</li>
+<li><strong>Na data de verificacao:</strong> o Intelligence Engine vai comparar metricas antes/depois automaticamente</li>
+</ol>
+
+<h2>Tipos de Problema e O que Fazer</h2>
+
+<div class="card-example">
+<pre><strong>Conta Suspensa</strong> → Verificar pagamento, trocar cartao, apelar se necessario
+<strong>Saldo Critico</strong> → Avisar cliente pra depositar AGORA
+<strong>Zero Leads</strong> → Checar pixel, LP, publico, criativo
+<strong>CPL Spike</strong> → Analisar por anuncio: qual gastou sem converter?
+<strong>CPL Alto</strong> → Cruzar com funil: se agendamento >20%, manter
+<strong>CTR Baixo</strong> → Criativo nao chama atencao: trocar hook/angulo
+<strong>Criativo Fadigado</strong> → Pausar ad com freq >3.5 + CTR caindo
+<strong>Anuncio Ruim</strong> → Pausar e liberar budget pros bons
+<strong>Anuncio Top</strong> → Escalar: +20% budget ou duplicar ad set
+<strong>Sem Criativo Novo</strong> → Pedir brief pro Design Agent</pre>
+</div>
+
+<h2>Ciclo Completo</h2>
+
+<div class="highlight">
+<strong>1. Detectar</strong> (automatico, 8h) → <strong>2. Diagnosticar</strong> (Claude AI) → <strong>3. Agir</strong> (Victor) → <strong>4. Medir</strong> (72h depois, automatico) → <strong>5. Aprender</strong> (benchmark: o que funcionou vira regra)
+</div>
+
+<a class="back" href="index.html">← Voltar pros POPs</a>
+</div></body></html>

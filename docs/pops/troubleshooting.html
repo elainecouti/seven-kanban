@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POP: Troubleshooting — Seven Midas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0b0e;color:#e8eaed;padding:40px 20px}
+.c{max-width:800px;margin:0 auto}
+h1{font-size:24px;font-weight:800;margin-bottom:4px}
+h2{font-size:18px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid #1e1f23;color:#ff4d6a}
+.sub{color:#7a7a7a;font-size:13px;margin-bottom:32px}
+.problem{background:#141518;border-radius:12px;padding:20px;margin-bottom:16px;border-left:4px solid #ff4d6a}
+.problem h3{font-size:15px;font-weight:700;margin-bottom:8px}
+.problem .sintoma{color:#ff4d6a;font-size:13px;margin-bottom:12px}
+.steps{list-style:none;padding:0;counter-reset:step}
+.steps li{padding:8px 0 8px 32px;position:relative;font-size:13px;color:#ccc;line-height:1.5;counter-increment:step}
+.steps li:before{content:counter(step);position:absolute;left:0;width:22px;height:22px;background:#1e1f23;border-radius:50%;text-align:center;line-height:22px;font-size:11px;font-weight:700;color:#00e5c7}
+.tip{background:#1a1b1f;padding:12px 16px;border-radius:8px;margin:12px 0;font-size:12px;color:#ffaa2c;border:1px solid #333}
+.back{display:inline-block;margin-top:32px;color:#00e5c7;font-size:13px;font-weight:600;text-decoration:none}
+</style></head><body>
+<div class="c">
+<h1>🔧 Troubleshooting — Problemas Comuns</h1>
+<p class="sub">Diagnostico rapido e solucao pra cada problema. Consulte antes de entrar em panico.</p>
+
+<h2>1. Conta Suspensa / Desativada</h2>
+<div class="problem">
+<h3>Sintomas</h3>
+<p class="sintoma">Campanha parou de rodar. Status da conta: SUSPENSA ou DESATIVADA no Gerenciador.</p>
+<ol class="steps">
+<li>Abrir Gerenciador de Negocios → Configuracoes → Contas de anuncio</li>
+<li>Verificar se ha notificacao de pagamento pendente (cartao recusado/expirado)</li>
+<li>Se for cartao: trocar metodo de pagamento por outro cartao valido</li>
+<li>Se for violacao de politica: ler a notificacao, ajustar o criativo/copy e apelar</li>
+<li>Apelar em: facebook.com/business/help → "Solicitar analise"</li>
+<li>Se demorar >48h: contatar suporte Meta via chat do Business Manager</li>
+<li>Plano B: ter conta backup com pixel e audiencias ja configuradas</li>
+</ol>
+<div class="tip">URGENCIA: cada dia parado = leads perdidos + learning phase resetado. Prioridade maxima.</div>
+</div>
+
+<h2>2. Campanha Reprovada</h2>
+<div class="problem">
+<h3>Sintomas</h3>
+<p class="sintoma">Anuncio com status DISAPPROVED ou WITH_ISSUES.</p>
+<ol class="steps">
+<li>Abrir o anuncio reprovado e ler o motivo da reprovacao</li>
+<li>Motivos comuns DM2: claims de saude ("cura diabetes"), antes/depois, mencao de condicao medica</li>
+<li>Editar o texto: remover claims diretos, usar linguagem indireta ("protocolo focado em...", "busca a remissao...")</li>
+<li>Se for imagem/video: verificar se mostra agulhas, sangue, resultados medicos</li>
+<li>Salvar e resubmeter — a revisao leva 24-48h</li>
+<li>Se reprovar de novo: duplicar o anuncio com copy diferente</li>
+<li>Se for falso positivo: apelar via "Solicitar analise"</li>
+</ol>
+<div class="tip">DM2: evitar palavras "cura", "eliminar diabetes", "parar insulina". Usar "remissao", "controle", "protocolo".</div>
+</div>
+
+<h2>3. Pixel Nao Dispara / Zero Eventos</h2>
+<div class="problem">
+<h3>Sintomas</h3>
+<p class="sintoma">Events Manager mostra 0 eventos. Campanha nao otimiza. LP nao registra no Supabase.</p>
+<ol class="steps">
+<li>Abrir a LP no celular (nao no desktop — testar como o usuario real)</li>
+<li>Abrir Events Manager → Testar eventos → colar URL da LP</li>
+<li>Clicar nos botoes da LP e verificar se PageView + Lead aparecem</li>
+<li>Se nao aparecer: verificar se o pixel_id no HTML da LP esta correto</li>
+<li>Verificar se fbq('track','Lead') ta no onclick do botao WPP</li>
+<li>Verificar se o dominio ta verificado no Business Manager (Configuracoes → Dominios)</li>
+<li>Se tudo parecer certo: limpar cache do navegador e testar de novo</li>
+</ol>
+<div class="tip">Testar com ?exclude=seven desativado (ou em aba anonima) pra nao ser filtrado pelo tracker.</div>
+</div>
+
+<h2>4. Saldo Pre-pago Zerou</h2>
+<div class="problem">
+<h3>Sintomas</h3>
+<p class="sintoma">Campanhas pausadas automaticamente. Balance = R$0.</p>
+<ol class="steps">
+<li>Confirmar no Gerenciador: Configuracoes → Pagamento → Saldo</li>
+<li>Gerar boleto ou transferir via PIX (opcao mais rapida)</li>
+<li>Avisar o cliente imediatamente: "Campanhas pausadas por falta de saldo"</li>
+<li>Apos deposito: verificar se as campanhas reativaram automaticamente</li>
+<li>Se nao reativaram: ativar manualmente cada campanha</li>
+<li>ATENCAO: se ficou parado >3 dias, o learning phase resetou</li>
+</ol>
+<div class="tip">Impacto: cada dia parado = perda de learning phase + otimizacao do algoritmo. Saldo deve ser monitorado diariamente.</div>
+</div>
+
+<h2>5. Zero Leads com Gasto</h2>
+<div class="problem">
+<h3>Sintomas</h3>
+<p class="sintoma">Gastou R$50+ em 12h e nao gerou nenhum lead.</p>
+<ol class="steps">
+<li>Verificar pixel: Events Manager ta recebendo eventos?</li>
+<li>Abrir a LP no celular: ta carregando? Botao WPP abre o WhatsApp?</li>
+<li>Verificar se a campanha ta otimizando pelo evento certo (Lead, nao PageView)</li>
+<li>Checar se o publico nao ta saturado (freq >4)</li>
+<li>Verificar se algum criativo foi reprovado</li>
+<li>Comparar com dias anteriores: e anomalia ou tendencia?</li>
+<li>Se tudo parecer ok: pode ser dia ruim (sabado/domingo tem menos conversao)</li>
+</ol>
+</div>
+
+<h2>6. CPL Explodiu de Repente</h2>
+<div class="problem">
+<h3>Sintomas</h3>
+<p class="sintoma">CPL de ontem 2x ou mais que a media dos ultimos 7 dias.</p>
+<ol class="steps">
+<li>Verificar nivel de anuncio: qual ad gastou mais sem converter?</li>
+<li>Checar frequencia do ad: se >3.5 com CTR <1% = fadiga. Pausar esse ad.</li>
+<li>Verificar se algum criativo top foi pausado acidentalmente</li>
+<li>Checar se o CPM subiu (concorrencia no leilao)</li>
+<li>Verificar se e sazonalidade (inicio/fim de mes, feriado)</li>
+<li>Se for 1 dia isolado: esperar 24h antes de tomar acao drastica</li>
+<li>Se for 3+ dias: acao urgente — pausar bottom ads, testar novo angulo</li>
+</ol>
+<div class="tip">NUNCA pausar tudo por causa de 1 dia ruim. Olhar janela de 3 dias minimo.</div>
+</div>
+
+<h2>7. ZapClinic Login Falhou</h2>
+<div class="problem">
+<h3>Sintomas</h3>
+<p class="sintoma">Dashboard mostra "Acesso bloqueado" ou "Login falhou" pra uma unidade.</p>
+<ol class="steps">
+<li>Verificar se a senha mudou (cliente pode ter trocado)</li>
+<li>Testar login manualmente no navegador: https://s17.zapclinic.app (ou s18, s22)</li>
+<li>Se login funciona no browser mas nao no script: limpar cookies/session</li>
+<li>Se senha mudou: pedir nova senha pro cliente e atualizar config.json</li>
+<li>Se servidor ta fora (timeout): esperar e tentar mais tarde — s17 e lento</li>
+<li>Se problema persistir: contatar suporte ZapClinic</li>
+</ol>
+<div class="tip">Servidores: s17 (maioria, lento), s18 (Parauapebas, Brasilia), s22 (Anapolis, Colatina).</div>
+</div>
+
+<a class="back" href="index.html">← Voltar pros POPs</a>
+</div></body></html>

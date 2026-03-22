@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POP: Pausar ou Escalar — Seven Midas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0b0e;color:#e8eaed;padding:40px 20px}
+.c{max-width:800px;margin:0 auto}
+h1{font-size:24px;font-weight:800;margin-bottom:4px}
+h2{font-size:18px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid #1e1f23}
+h3{font-size:15px;font-weight:700;margin:20px 0 8px;color:#00e5c7}
+.sub{color:#7a7a7a;font-size:13px;margin-bottom:32px}
+.card{background:#141518;border-radius:12px;padding:20px;margin-bottom:12px;border-left:4px solid #333}
+.card-green{border-color:#00d68f}
+.card-yellow{border-color:#ffaa2c}
+.card-red{border-color:#ff4d6a}
+.card-blue{border-color:#4d8eff}
+.rule{font-size:15px;font-weight:700;margin-bottom:8px}
+.detail{font-size:13px;color:#b0b0b0;line-height:1.6}
+.highlight{background:#1e1f23;padding:16px 20px;border-radius:10px;margin:16px 0;border:1px solid #333}
+.highlight-text{font-size:14px;font-weight:700;color:#ffaa2c;line-height:1.6}
+table{width:100%;border-collapse:collapse;margin:16px 0}
+th{text-align:left;padding:10px 12px;background:#141518;font-size:12px;color:#7a7a7a;text-transform:uppercase;letter-spacing:.5px}
+td{padding:10px 12px;border-bottom:1px solid #1e1f23;font-size:13px}
+.green{color:#00d68f}.yellow{color:#ffaa2c}.red{color:#ff4d6a}.blue{color:#4d8eff}
+ul{list-style:none;padding:0;margin:8px 0}
+li{padding:6px 0;padding-left:20px;position:relative;font-size:13px;color:#ccc}
+li:before{content:"→";position:absolute;left:0;color:#00e5c7}
+.check li:before{content:"☐";color:#7a7a7a}
+.back{display:inline-block;margin-top:32px;color:#00e5c7;font-size:13px;font-weight:600;text-decoration:none}
+</style></head><body>
+<div class="c">
+<h1>⚖️ Quando Pausar ou Escalar</h1>
+<p class="sub">Regras de decisao baseadas em CPL + funil. Nunca decidir so pelo CPL.</p>
+
+<div class="highlight">
+<p class="highlight-text">REGRA DE OURO: CPL caro com funil saudavel (agendamento >20%) = MANTER ou ESCALAR.<br>
+CPL barato com funil quebrado (agendamento <15%) = problema e do SDR, nao do trafego.</p>
+</div>
+
+<h2>Matriz de Decisao</h2>
+
+<div class="card card-green">
+<div class="rule">🟢 ESCALAR — CPL < R$15 com volume</div>
+<div class="detail">
+O anuncio ta performando bem. Escalar com cuidado:
+<ul>
+<li>Aumentar budget em no maximo 20% a cada 3 dias</li>
+<li>Nunca duplicar budget de uma vez (mata o learning phase)</li>
+<li>Monitorar CPL nas proximas 48h — se subir, voltar ao budget anterior</li>
+<li>Se mantiver CPL bom: duplicar ad set pra outro publico (escala horizontal)</li>
+</ul>
+</div>
+</div>
+
+<div class="card card-yellow">
+<div class="rule">🟡 MONITORAR — CPL R$15-18</div>
+<div class="detail">
+Zona de atencao. Nao mexer ainda:
+<ul>
+<li>Verificar taxa de agendamento: se >20%, ta ok — funil saudavel</li>
+<li>Verificar se e spike temporario (1 dia ruim) ou tendencia (3+ dias)</li>
+<li>Checar frequencia: se >3.0, pode ser fadiga de criativo</li>
+<li>Se mantiver 3+ dias: investigar criativo, publico e placement</li>
+</ul>
+</div>
+</div>
+
+<div class="card card-red">
+<div class="rule">🔴 INVESTIGAR — CPL > R$19</div>
+<div class="detail">
+MAS antes de pausar, cruzar com funil:
+<ul>
+<li><strong>Agendamento > 20%:</strong> Funil saudavel. O CPL ta caro mas ta convertendo. <span class="green">MANTER.</span> O custo por agendamento que importa.</li>
+<li><strong>Agendamento 15-20%:</strong> Zona cinza. Otimizar criativo/publico mas nao pausar tudo.</li>
+<li><strong>Agendamento < 15%:</strong> Funil quebrado + CPL caro. <span class="red">Acao urgente:</span> pausar criativos ruins, testar novos angulos.</li>
+</ul>
+</div>
+</div>
+
+<div class="card card-red">
+<div class="rule">🚨 EMERGENCIA — Zero leads em 12h com gasto > R$50</div>
+<div class="detail">
+Algo quebrou. Investigar IMEDIATAMENTE:
+<ul>
+<li>Checar Events Manager: pixel ta disparando?</li>
+<li>Abrir a LP no celular: ta carregando? Botao WPP funciona?</li>
+<li>Verificar se campanha foi reprovada ou pausada automaticamente</li>
+<li>Conferir se o publico nao ta com frequencia >5 (saturado)</li>
+</ul>
+</div>
+</div>
+
+<h2>Tipos de Escala</h2>
+
+<div class="card card-blue">
+<div class="rule">📈 Escala Vertical (aumentar budget)</div>
+<div class="detail">
+<ul>
+<li>Aumentar maximo 20% do budget por vez</li>
+<li>Esperar 3 dias entre cada aumento</li>
+<li>Se o CPL subir mais de 15% apos o aumento, voltar ao anterior</li>
+<li>Funciona melhor em CBO (o Meta redistribui sozinho)</li>
+</ul>
+</div>
+</div>
+
+<div class="card card-blue">
+<div class="rule">🔀 Escala Horizontal (duplicar)</div>
+<div class="detail">
+<ul>
+<li>Duplicar o ad set que performa bem</li>
+<li>Mudar UMA variavel: publico diferente, ou geo diferente, ou faixa etaria diferente</li>
+<li>Manter o mesmo criativo que ta funcionando</li>
+<li>Dar 3-5 dias pro novo ad set sair do learning phase</li>
+<li>Se nao performar em 5 dias com gasto >R$100: pausar</li>
+</ul>
+</div>
+</div>
+
+<h2>O que NUNCA fazer</h2>
+
+<div class="card card-red">
+<div class="detail">
+<ul>
+<li>Nunca pausar um criativo que ta convertendo so porque o CPL ta "acima da meta" — olhar o funil</li>
+<li>Nunca dobrar o budget de uma vez — mata o learning phase</li>
+<li>Nunca pausar e reativar a mesma campanha no mesmo dia — reseta o algoritmo</li>
+<li>Nunca mudar publico + criativo + copy ao mesmo tempo — impossivel saber o que funcionou</li>
+<li>Nunca comparar CPL de um dia isolado com a media do mes — olhar janela de 3-7 dias</li>
+</ul>
+</div>
+</div>
+
+<h2>Checklist Antes de Pausar</h2>
+
+<div class="card">
+<ul class="check">
+<li>Verifiquei a taxa de agendamento (nao so o CPL)?</li>
+<li>O problema e de trafego ou de SDR?</li>
+<li>Analisei por nivel de anuncio (nao so conta)?</li>
+<li>E tendencia (3+ dias) ou spike de 1 dia?</li>
+<li>A frequencia ta alta (>3.5)?</li>
+<li>Tem criativo novo pra substituir?</li>
+<li>Comuniquei a decisao no Kanban?</li>
+</ul>
+</div>
+
+<a class="back" href="index.html">← Voltar pros POPs</a>
+</div></body></html>
