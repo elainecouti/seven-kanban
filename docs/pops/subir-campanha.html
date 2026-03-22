@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>POP: Subir Campanha — Seven Midas</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:#0a0b0e;color:#e8eaed;padding:40px 20px}
+.c{max-width:800px;margin:0 auto}
+h1{font-size:24px;font-weight:800;margin-bottom:4px}
+h2{font-size:18px;font-weight:700;margin:32px 0 16px;padding-bottom:8px;border-bottom:1px solid #1e1f23}
+.sub{color:#7a7a7a;font-size:13px;margin-bottom:32px}
+.step{background:#141518;border-radius:12px;padding:20px;margin-bottom:12px;border-left:4px solid #00e5c7}
+.step-n{font-size:12px;color:#00e5c7;font-weight:700;margin-bottom:6px}
+.step-title{font-size:15px;font-weight:700;margin-bottom:8px}
+.step-detail{font-size:13px;color:#b0b0b0;line-height:1.6}
+.step-detail strong{color:#e8eaed}
+code{background:#1e1f23;padding:2px 8px;border-radius:4px;font-size:12px;color:#00e5c7}
+ul{list-style:none;padding:0;margin:8px 0}
+li{padding:5px 0;padding-left:16px;position:relative;font-size:13px;color:#ccc}
+li:before{content:"→";position:absolute;left:0;color:#00e5c7}
+.check li:before{content:"☐";color:#7a7a7a}
+.warn{background:#1a1b1f;padding:12px 16px;border-radius:8px;margin:12px 0;font-size:12px;color:#ffaa2c;border:1px solid #333}
+.back{display:inline-block;margin-top:32px;color:#00e5c7;font-size:13px;font-weight:600;text-decoration:none}
+</style></head><body>
+<div class="c">
+<h1>🚀 Como Subir uma Campanha</h1>
+<p class="sub">Passo a passo completo. Seguir na ordem, nao pular etapas.</p>
+
+<div class="step"><div class="step-n">PASSO 1</div>
+<div class="step-title">Definir Objetivo</div>
+<div class="step-detail">
+<ul>
+<li><strong>Clinicas DM2/Emagrecentro/CDT:</strong> OUTCOME_ENGAGEMENT → Conversas WhatsApp</li>
+<li><strong>LP com pixel:</strong> OUTCOME_LEADS → Lead event</li>
+<li><strong>Max Outlet:</strong> OUTCOME_SALES → Purchase</li>
+<li><strong>Workshop:</strong> OUTCOME_SALES → Purchase (Monetizze postback)</li>
+<li><strong>Medicos perfil:</strong> OUTCOME_TRAFFIC → Visitas ao perfil</li>
+</ul>
+</div></div>
+
+<div class="step"><div class="step-n">PASSO 2</div>
+<div class="step-title">Nomenclatura Padrao</div>
+<div class="step-detail">
+<code>DD/MM [objetivo] [segmentacao] [tipo] CBO/ABO Final XXXX</code><br><br>
+Exemplos:<br>
+<ul>
+<li><code>06/03 [vendas] [wpp] [40+] [bairros-nobres] CBO Final 1696</code></li>
+<li><code>20/03 leads LP Vitoria CBO</code></li>
+<li><code>10/01 [BOFU] [vendas] [wpp] [rmk] [H-M] CBO Final 8381</code></li>
+</ul>
+</div></div>
+
+<div class="step"><div class="step-n">PASSO 3</div>
+<div class="step-title">Configurar Publico</div>
+<div class="step-detail">
+<ul>
+<li><strong>Idade:</strong> 35+ ou 40+ (testar por unidade)</li>
+<li><strong>Geo:</strong> Raio da clinica ou CEPs de bairros nobres</li>
+<li><strong>Interesses:</strong> Saude + financeiros (proxy renda) + viajantes</li>
+<li><strong>Advantage+:</strong> OFF (advantage_audience = 0) em campanhas de conversao</li>
+<li><strong>Separar H e M</strong> em ad sets diferentes (nunca misturar)</li>
+</ul>
+</div></div>
+
+<div class="step"><div class="step-n">PASSO 4</div>
+<div class="step-title">Configurar Pixel e Evento</div>
+<div class="step-detail">
+<ul>
+<li>Verificar pixel_id da unidade no config.json</li>
+<li>WPP: otimizar por <code>messaging_conversation_started_7d</code></li>
+<li>LP: otimizar por <code>Lead</code> (pixel event)</li>
+<li>Testar no Events Manager ANTES de ativar</li>
+</ul>
+<div class="warn">Se o pixel nao dispara o evento certo, o algoritmo nao recebe sinais e a entrega piora.</div>
+</div></div>
+
+<div class="step"><div class="step-n">PASSO 5</div>
+<div class="step-title">Criativos</div>
+<div class="step-detail">
+<ul>
+<li><strong>Minimo 3 criativos</strong> por ad set (pra Meta testar)</li>
+<li><strong>Formatos:</strong> video (melhor), imagem, carrossel</li>
+<li><strong>Hook:</strong> primeiros 3 segundos precisam prender (pergunta, dado chocante, dor)</li>
+<li><strong>Copy:</strong> primary text + headline + description</li>
+<li><strong>CTA:</strong> WHATSAPP_MESSAGE (clinicas) ou LEARN_MORE (LP) ou SHOP_NOW (ecommerce)</li>
+<li><strong>Classificar por genero:</strong> H (homens), M (mulheres), A (ambos)</li>
+</ul>
+</div></div>
+
+<div class="step"><div class="step-n">PASSO 6</div>
+<div class="step-title">Budget</div>
+<div class="step-detail">
+<ul>
+<li><strong>CBO (recomendado):</strong> budget na campanha, Meta distribui entre ad sets</li>
+<li><strong>ABO:</strong> budget no ad set + <code>bid_strategy: LOWEST_COST_WITHOUT_CAP</code></li>
+<li><strong>Comecar com:</strong> R$50-100/dia por campanha</li>
+<li><strong>CBO:</strong> NAO passar daily_budget no ad set</li>
+<li><strong>ABO:</strong> passar daily_budget + bid_strategy no ad set</li>
+</ul>
+</div></div>
+
+<div class="step"><div class="step-n">PASSO 7</div>
+<div class="step-title">Parametros Obrigatorios API</div>
+<div class="step-detail">
+<ul>
+<li><code>attribution_spec: [{"event_type":"CLICK_THROUGH","window_days":1}]</code></li>
+<li><code>destination_type: WHATSAPP</code> (pra OUTCOME_SALES com CONVERSATIONS)</li>
+<li><code>targeting_automation: advantage_audience = 0</code></li>
+</ul>
+<div class="warn">Sem attribution_spec da erro 2490487. Sem destination_type da erro em campanhas de vendas WPP.</div>
+</div></div>
+
+<h2>Checklist Final Antes de Ativar</h2>
+
+<div class="step">
+<ul class="check">
+<li>Objetivo correto pro tipo de cliente?</li>
+<li>Nomenclatura padrao aplicada?</li>
+<li>Publico configurado (idade, geo, interesses)?</li>
+<li>Advantage+ OFF?</li>
+<li>Pixel e evento de otimizacao corretos?</li>
+<li>Testei o pixel no Events Manager?</li>
+<li>Minimo 3 criativos no ad set?</li>
+<li>Copy revisada (sem claims proibidos)?</li>
+<li>CTA correto pro objetivo?</li>
+<li>Budget definido (CBO ou ABO)?</li>
+<li>Campanha criada como PAUSED (revisar antes de ativar)?</li>
+<li>LP funciona no celular? (se campanha LP)</li>
+<li>Botao WPP da LP abre o WhatsApp certo? (se campanha LP)</li>
+</ul>
+</div>
+
+<a class="back" href="index.html">← Voltar pros POPs</a>
+</div></body></html>
