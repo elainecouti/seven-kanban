@@ -117,6 +117,83 @@ function renderCalendar() {
 
   html += '</div>';
 
+  // ── AGENDA: Hoje + Proximos 7 dias + Atrasadas ──
+  var todayStr = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+
+  var overdueTasks = source.filter(function(c) {
+    return c.due_date && c.due_date < todayStr && c.column_key !== 'done';
+  }).sort(function(a, b) { return a.due_date.localeCompare(b.due_date); });
+
+  var todayTasks = source.filter(function(c) {
+    return c.due_date === todayStr && c.column_key !== 'done';
+  });
+
+  var next7 = [];
+  for (var nd = 1; nd <= 7; nd++) {
+    var futureDate = new Date(today);
+    futureDate.setDate(futureDate.getDate() + nd);
+    var futStr = futureDate.getFullYear() + '-' + String(futureDate.getMonth() + 1).padStart(2, '0') + '-' + String(futureDate.getDate()).padStart(2, '0');
+    var futureTasks = source.filter(function(c) { return c.due_date === futStr && c.column_key !== 'done'; });
+    if (futureTasks.length > 0) {
+      var dayName = ['Dom','Seg','Ter','Qua','Qui','Sex','Sab'][futureDate.getDay()];
+      next7.push({ date: futStr, dayName: dayName, dayNum: futureDate.getDate(), tasks: futureTasks });
+    }
+  }
+
+  html += '<div class="agenda-wrap">';
+
+  // Atrasadas
+  if (overdueTasks.length > 0) {
+    html += '<div class="agenda-section agenda-overdue">';
+    html += '<div class="agenda-header"><span class="agenda-dot" style="background:#ef4444"></span> Atrasadas <span class="agenda-count agenda-count-red">' + overdueTasks.length + '</span></div>';
+    overdueTasks.forEach(function(card) {
+      var pri = getPriorityInfo(card.priority);
+      var diasAtraso = Math.floor((today - new Date(card.due_date + 'T00:00:00')) / 86400000);
+      html += '<div class="agenda-item" data-id="' + card.id + '">' +
+        '<span class="cal-card-dot" style="background:' + pri.color + '"></span>' +
+        '<span class="agenda-title">' + escapeHtml(card.title) + '</span>' +
+        '<span class="agenda-delay">-' + diasAtraso + 'd</span>' +
+        (card.assignee ? '<span class="agenda-assignee">' + escapeHtml(card.assignee.split(' ')[0]) + '</span>' : '') +
+      '</div>';
+    });
+    html += '</div>';
+  }
+
+  // Hoje
+  html += '<div class="agenda-section">';
+  html += '<div class="agenda-header"><span class="agenda-dot" style="background:#7c3aed"></span> Hoje' + (todayTasks.length > 0 ? ' <span class="agenda-count">' + todayTasks.length + '</span>' : ' <span class="agenda-empty">nenhuma tarefa</span>') + '</div>';
+  todayTasks.forEach(function(card) {
+    var pri = getPriorityInfo(card.priority);
+    var statusLabel = card.column_key === 'doing' ? 'em andamento' : card.column_key === 'review' ? 'revisao' : 'a fazer';
+    html += '<div class="agenda-item" data-id="' + card.id + '">' +
+      '<span class="cal-card-dot" style="background:' + pri.color + '"></span>' +
+      '<span class="agenda-title">' + escapeHtml(card.title) + '</span>' +
+      '<span class="agenda-status">' + statusLabel + '</span>' +
+      (card.assignee ? '<span class="agenda-assignee">' + escapeHtml(card.assignee.split(' ')[0]) + '</span>' : '') +
+    '</div>';
+  });
+  html += '</div>';
+
+  // Proximos 7 dias
+  if (next7.length > 0) {
+    html += '<div class="agenda-section">';
+    html += '<div class="agenda-header"><span class="agenda-dot" style="background:#f59e0b"></span> Proximos 7 dias</div>';
+    next7.forEach(function(group) {
+      html += '<div class="agenda-day-label">' + group.dayName + ', ' + group.dayNum + '</div>';
+      group.tasks.forEach(function(card) {
+        var pri = getPriorityInfo(card.priority);
+        html += '<div class="agenda-item" data-id="' + card.id + '">' +
+          '<span class="cal-card-dot" style="background:' + pri.color + '"></span>' +
+          '<span class="agenda-title">' + escapeHtml(card.title) + '</span>' +
+          (card.assignee ? '<span class="agenda-assignee">' + escapeHtml(card.assignee.split(' ')[0]) + '</span>' : '') +
+        '</div>';
+      });
+    });
+    html += '</div>';
+  }
+
+  html += '</div>';
+
   // Cards without due date
   var noDue = source.filter(function(c) { return !c.due_date; });
   if (noDue.length > 0) {
@@ -147,8 +224,8 @@ function renderCalendar() {
     renderCalendar();
   });
 
-  // Card click
-  container.querySelectorAll('.cal-card').forEach(function(el) {
+  // Card click (calendar + agenda)
+  container.querySelectorAll('.cal-card, .agenda-item').forEach(function(el) {
     el.addEventListener('click', function() {
       openCardDetail(el.dataset.id);
     });
@@ -172,10 +249,14 @@ function showBoardView() {
   if (dashboard) dashboard.style.display = 'none';
   var clientsPanel = document.getElementById('clientsPanelView');
   if (clientsPanel) clientsPanel.style.display = 'none';
+  var intelView = document.getElementById('intelView');
+  if (intelView) intelView.style.display = 'none';
   document.getElementById('btnCalendar').classList.remove('active');
   document.getElementById('btnDashboard').classList.remove('active');
   var btnClients = document.getElementById('btnClientsPanel');
   if (btnClients) btnClients.classList.remove('active');
+  var btnIntel = document.getElementById('btnIntel');
+  if (btnIntel) btnIntel.classList.remove('active');
   document.querySelector('.board').style.display = '';
   // Restore tabs on mobile
   if (window.innerWidth <= 768) {

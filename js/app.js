@@ -145,6 +145,17 @@ async function finishInit() {
     }
   });
 
+  // Intel Feed toggle
+  document.getElementById('btnIntel').addEventListener('click', function() {
+    if (currentView === 'intel') {
+      currentView = 'board';
+      showBoardView();
+    } else {
+      currentView = 'intel';
+      showIntelView();
+    }
+  });
+
   // Mobile tabs
   function activateMobileTab(colKey) {
     document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.toggle('active', b.dataset.column === colKey); });
