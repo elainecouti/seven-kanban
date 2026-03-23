@@ -3,6 +3,52 @@
 let calendarYear = new Date().getFullYear();
 let calendarMonth = new Date().getMonth();
 
+/* Feriados nacionais brasileiros (fixos + moveis calculados) */
+function getHolidays(year) {
+  var fixed = [
+    { m: 1, d: 1, name: 'Ano Novo' },
+    { m: 4, d: 21, name: 'Tiradentes' },
+    { m: 5, d: 1, name: 'Dia do Trabalho' },
+    { m: 9, d: 7, name: 'Independencia' },
+    { m: 10, d: 12, name: 'N. Sra. Aparecida' },
+    { m: 11, d: 2, name: 'Finados' },
+    { m: 11, d: 15, name: 'Proclamacao da Republica' },
+    { m: 11, d: 20, name: 'Consciencia Negra' },
+    { m: 12, d: 25, name: 'Natal' },
+  ];
+  // Pascoa (algoritmo de Meeus)
+  var a = year % 19, b = Math.floor(year / 100), c = year % 100;
+  var d = Math.floor(b / 4), e = b % 4, f = Math.floor((b + 8) / 25);
+  var g = Math.floor((b - f + 1) / 3), h = (19 * a + b - d - g + 15) % 30;
+  var i = Math.floor(c / 4), k = c % 4;
+  var l = (32 + 2 * e + 2 * i - h - k) % 7;
+  var m = Math.floor((a + 11 * h + 22 * l) / 451);
+  var mes = Math.floor((h + l - 7 * m + 114) / 31);
+  var dia = ((h + l - 7 * m + 114) % 31) + 1;
+  var pascoa = new Date(year, mes - 1, dia);
+
+  function addDays(dt, n) { var r = new Date(dt); r.setDate(r.getDate() + n); return r; }
+
+  var moveis = [
+    { dt: addDays(pascoa, -47), name: 'Carnaval' },
+    { dt: addDays(pascoa, -46), name: 'Carnaval' },
+    { dt: addDays(pascoa, -2), name: 'Sexta-feira Santa' },
+    { dt: pascoa, name: 'Pascoa' },
+    { dt: addDays(pascoa, 60), name: 'Corpus Christi' },
+  ];
+
+  var map = {};
+  fixed.forEach(function(f) {
+    var key = year + '-' + String(f.m).padStart(2, '0') + '-' + String(f.d).padStart(2, '0');
+    map[key] = f.name;
+  });
+  moveis.forEach(function(mv) {
+    var key = mv.dt.getFullYear() + '-' + String(mv.dt.getMonth() + 1).padStart(2, '0') + '-' + String(mv.dt.getDate()).padStart(2, '0');
+    map[key] = mv.name;
+  });
+  return map;
+}
+
 function renderCalendar() {
   var container = document.getElementById('calendarView');
   if (!container) return;
@@ -43,15 +89,19 @@ function renderCalendar() {
     html += '<div class="cal-cell cal-cell-empty"></div>';
   }
 
+  // Feriados do ano
+  var holidays = getHolidays(calendarYear);
+
   // Day cells
   for (var day = 1; day <= daysInMonth; day++) {
     var dateStr = calendarYear + '-' + String(calendarMonth + 1).padStart(2, '0') + '-' + String(day).padStart(2, '0');
     var cellDate = new Date(calendarYear, calendarMonth, day);
     var isToday = cellDate.getTime() === today.getTime();
+    var holiday = holidays[dateStr] || null;
     var dayCards = cardsByDate[dateStr] || [];
 
-    html += '<div class="cal-cell' + (isToday ? ' cal-today' : '') + '">';
-    html += '<div class="cal-day-num">' + day + '</div>';
+    html += '<div class="cal-cell' + (isToday ? ' cal-today' : '') + (holiday ? ' cal-holiday' : '') + '">';
+    html += '<div class="cal-day-num">' + day + (holiday ? '<span class="cal-holiday-name">' + holiday + '</span>' : '') + '</div>';
 
     dayCards.forEach(function(card) {
       var pri = getPriorityInfo(card.priority);
