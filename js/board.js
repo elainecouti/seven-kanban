@@ -122,9 +122,18 @@ function applyFilters() {
 function restoreFilters() {
   try {
     var saved = JSON.parse(localStorage.getItem('kanban_filters') || '{}');
-    if (saved.client) document.getElementById('filterClient').value = saved.client;
+    if (saved.client) {
+      var el = document.getElementById('filterClient');
+      el.value = saved.client;
+      // If saved value doesn't exist in dropdown, reset it
+      if (el.value !== saved.client) { el.value = ''; saved.client = ''; }
+    }
     if (saved.category) document.getElementById('filterCategory').value = saved.category;
-    if (saved.member) document.getElementById('filterMember').value = saved.member;
+    if (saved.member) {
+      var el2 = document.getElementById('filterMember');
+      el2.value = saved.member;
+      if (el2.value !== saved.member) { el2.value = ''; saved.member = ''; }
+    }
     if (saved.search) document.getElementById('filterSearch').value = saved.search;
   } catch(e) {}
 }
