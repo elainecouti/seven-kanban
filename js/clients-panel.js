@@ -6,39 +6,100 @@ async function renderClientsPanel() {
 
   container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">Carregando painel de clientes...</div>';
 
-  // Buscar intelligence_actions mais recentes (hoje)
-  var today = new Date().toISOString().split('T')[0];
+  // ── Fonte 1: intelligence_actions (últimas 48h, pega a execução mais recente) ──
+  var cutoff = new Date(Date.now() - 48 * 3600000).toISOString();
   var { data: actions } = await sb.from('intelligence_actions')
     .select('*')
-    .gte('created_at', today + 'T00:00:00')
+    .gte('created_at', cutoff)
     .order('created_at', { ascending: false });
 
   if (!actions) actions = [];
 
-  // Agrupar por unidade
-  var byUnit = {};
+  // Deduplica: se houver vários dias, pega só a última execução por unidade+tipo
+  var seen = {};
+  var dedupActions = [];
   actions.forEach(function(a) {
-    if (!byUnit[a.unidade]) byUnit[a.unidade] = { issues: [], slug: a.slug };
-    byUnit[a.unidade].issues.push(a);
+    var key = a.unidade + '|' + a.tipo_problema;
+    if (!seen[key]) { seen[key] = true; dedupActions.push(a); }
   });
 
-  // Classificar clientes
-  var perigo = [], atencao = [], saudavel = [];
+  // ── Fonte 2: cards ativos do kanban (não done, não archived) com alertas ──
+  var activeCards = (filteredCards || cards).filter(function(c) {
+    return c.column_key !== 'done';
+  });
 
-  // Todos os clientes (mesmo sem issues)
+  // Mapear cards por client_id → issues do kanban
+  var cardsByClient = {};
+  activeCards.forEach(function(c) {
+    if (!c.client_id) return;
+    if (!cardsByClient[c.client_id]) cardsByClient[c.client_id] = [];
+    cardsByClient[c.client_id].push(c);
+  });
+
+  // ── Agrupar intelligence_actions por unidade (nome normalizado) ──
+  function normalizeUnit(str) {
+    return str.toLowerCase()
+      .replace(/^dm2\s+/i, '')
+      .replace(/^emagrecentro\s+/i, 'emag ')
+      .replace(/^cartão de todos\s+/i, 'cdt ')
+      .replace(/\s*\(.*\)\s*$/, '') // remove "(Diego Vieira)" etc
+      .normalize('NFD').replace(/[\u0300-\u036f]/g, '') // remove acentos
+      .replace(/\s+/g, ' ').trim();
+  }
+
+  var byUnitNorm = {};
+  dedupActions.forEach(function(a) {
+    var key = normalizeUnit(a.unidade);
+    if (!byUnitNorm[key]) byUnitNorm[key] = { issues: [], slug: a.slug, originalName: a.unidade };
+    byUnitNorm[key].issues.push(a);
+  });
+
+  function findUnitData(clientName) {
+    var norm = normalizeUnit(clientName);
+    if (byUnitNorm[norm]) return byUnitNorm[norm];
+    // Fallback: check if any key contains or is contained
+    var keys = Object.keys(byUnitNorm);
+    for (var i = 0; i < keys.length; i++) {
+      if (norm.indexOf(keys[i]) >= 0 || keys[i].indexOf(norm) >= 0) return byUnitNorm[keys[i]];
+    }
+    return null;
+  }
+
+  // ── Classificar clientes ──
+  var perigo = [], atencao = [], saudavel = [];
+  var matchedNormKeys = new Set();
+
   allClients.forEach(function(c) {
     var nome = c.name;
-    var unitData = byUnit[nome];
-    if (!unitData) {
-      saudavel.push({ nome: nome, slug: c.slug, issues: [], gravidade: 'ok' });
+    var unitData = findUnitData(nome);
+    if (unitData) matchedNormKeys.add(normalizeUnit(nome));
+    var clientCards = cardsByClient[c.id] || [];
+
+    // Contar issues: intelligence_actions + cards urgentes/alta
+    var intelIssues = unitData ? unitData.issues : [];
+    var cardIssues = clientCards.filter(function(card) {
+      return card.priority === 'urgente' || card.priority === 'alta';
+    });
+
+    var totalIssues = intelIssues.length + cardIssues.length;
+
+    var entry = {
+      nome: nome,
+      slug: unitData ? unitData.slug : c.slug,
+      issues: intelIssues,
+      cardIssues: cardIssues,
+      totalIssues: totalIssues
+    };
+
+    if (totalIssues === 0) {
+      entry.gravidade = 'ok';
+      saudavel.push(entry);
       return;
     }
 
-    var issues = unitData.issues;
-    var hasCritico = issues.some(function(i) { return i.gravidade === 'critico'; });
-    var hasUrgente = issues.some(function(i) { return i.gravidade === 'urgente'; });
-
-    var entry = { nome: nome, slug: unitData.slug, issues: issues };
+    var hasCritico = intelIssues.some(function(i) { return i.gravidade === 'critico'; });
+    var hasUrgente = intelIssues.some(function(i) { return i.gravidade === 'urgente'; }) ||
+      cardIssues.some(function(card) { return card.priority === 'urgente'; });
 
     if (hasCritico) {
       entry.gravidade = 'critico';
@@ -52,33 +113,46 @@ async function renderClientsPanel() {
     }
   });
 
-  // Clientes com issues mas sem registro em allClients
-  Object.keys(byUnit).forEach(function(nome) {
-    var found = allClients.some(function(c) { return c.name === nome; });
-    if (!found && nome !== 'Sistema') {
-      var issues = byUnit[nome].issues;
-      var hasCritico = issues.some(function(i) { return i.gravidade === 'critico'; });
-      var hasUrgente = issues.some(function(i) { return i.gravidade === 'urgente'; });
-      var entry = { nome: nome, slug: byUnit[nome].slug, issues: issues };
-      if (hasCritico) { entry.gravidade = 'critico'; perigo.push(entry); }
-      else if (hasUrgente) { entry.gravidade = 'urgente'; atencao.push(entry); }
-      else { entry.gravidade = 'atencao'; atencao.push(entry); }
-    }
+  // Clientes com issues em intelligence_actions mas sem match em allClients
+  Object.keys(byUnitNorm).forEach(function(normKey) {
+    if (matchedNormKeys.has(normKey)) return;
+    var unitData = byUnitNorm[normKey];
+    if (unitData.originalName === 'Sistema') return;
+    var issues = unitData.issues;
+    var hasCritico = issues.some(function(i) { return i.gravidade === 'critico'; });
+    var hasUrgente = issues.some(function(i) { return i.gravidade === 'urgente'; });
+    var entry = { nome: unitData.originalName, slug: unitData.slug, issues: issues, cardIssues: [], totalIssues: issues.length };
+    if (hasCritico) { entry.gravidade = 'critico'; perigo.push(entry); }
+    else if (hasUrgente) { entry.gravidade = 'urgente'; atencao.push(entry); }
+    else { entry.gravidade = 'atencao'; atencao.push(entry); }
   });
 
-  // Render
+  // Ordenar por número de issues (mais problemas primeiro)
+  perigo.sort(function(a, b) { return b.totalIssues - a.totalIssues; });
+  atencao.sort(function(a, b) { return b.totalIssues - a.totalIssues; });
+
+  // ── Render ──
+  var totalIntelIssues = dedupActions.filter(function(a) { return a.unidade !== 'Sistema'; }).length;
+  var totalCardIssues = Object.values(cardsByClient).reduce(function(sum, arr) {
+    return sum + arr.filter(function(c) { return c.priority === 'urgente' || c.priority === 'alta'; }).length;
+  }, 0);
+
+  // Timestamp da última análise
+  var lastAnalysis = dedupActions.length > 0 ? new Date(dedupActions[0].created_at) : null;
+  var lastStr = lastAnalysis ? lastAnalysis.toLocaleDateString('pt-BR') + ' ' + lastAnalysis.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'nunca';
+
   var html = '<div class="cp-container">';
 
   // KPI cards
-  var totalIssues = actions.filter(function(a) { return a.unidade !== 'Sistema'; }).length;
-  var totalCritico = actions.filter(function(a) { return a.gravidade === 'critico'; }).length;
-  var totalUrgente = actions.filter(function(a) { return a.gravidade === 'urgente'; }).length;
   html += '<div class="cp-kpis">';
   html += '<div class="cp-kpi"><div class="cp-kpi-num" style="color:#ff4d6a">' + perigo.length + '</div><div class="cp-kpi-label">Em Perigo</div></div>';
   html += '<div class="cp-kpi"><div class="cp-kpi-num" style="color:#ffaa2c">' + atencao.length + '</div><div class="cp-kpi-label">Atencao</div></div>';
   html += '<div class="cp-kpi"><div class="cp-kpi-num" style="color:#00d68f">' + saudavel.length + '</div><div class="cp-kpi-label">Saudaveis</div></div>';
-  html += '<div class="cp-kpi"><div class="cp-kpi-num">' + totalIssues + '</div><div class="cp-kpi-label">Issues Hoje</div></div>';
+  html += '<div class="cp-kpi"><div class="cp-kpi-num">' + (totalIntelIssues + totalCardIssues) + '</div><div class="cp-kpi-label">Issues Ativas</div></div>';
   html += '</div>';
+
+  // Última análise
+  html += '<div class="cp-last-analysis">Ultima analise: ' + lastStr + '</div>';
 
   // Perigo
   if (perigo.length > 0) {
@@ -111,14 +185,16 @@ async function renderClientsPanel() {
 function renderClientCard(client, level) {
   var borderColor = level === 'danger' ? '#ff4d6a' : (level === 'warning' ? '#ffaa2c' : '#00d68f');
   var issues = client.issues || [];
+  var cardIssues = client.cardIssues || [];
 
   var issuesList = '';
+
+  // Intelligence issues
   issues.forEach(function(issue) {
     var emoji = issue.gravidade === 'critico' ? '🔴' : (issue.gravidade === 'urgente' ? '🟡' : '🟠');
     var tipo = issue.tipo_problema.replace(/_/g, ' ');
     tipo = tipo.charAt(0).toUpperCase() + tipo.slice(1);
 
-    // Resumo curto dos dados
     var dados = {};
     try { dados = typeof issue.metricas_antes === 'string' ? JSON.parse(issue.metricas_antes) : (issue.metricas_antes || {}); } catch(e) {}
     var resumo = '';
@@ -141,15 +217,24 @@ function renderClientCard(client, level) {
     issuesList += '<div class="cp-issue">' + emoji + ' ' + tipo + (resumo ? ' — <span class="cp-resumo">' + resumo + '</span>' : '') + '</div>';
   });
 
+  // Kanban card issues (urgente/alta)
+  cardIssues.forEach(function(card) {
+    var emoji = card.priority === 'urgente' ? '🔴' : '🟠';
+    var title = card.title.replace(/^[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}\s]+/u, '').substring(0, 50);
+    issuesList += '<div class="cp-issue">' + emoji + ' ' + escapeHtml(title) + '</div>';
+  });
+
+  var totalCount = issues.length + cardIssues.length;
+
   var linkHtml = '';
   if (client.slug) {
-    linkHtml = '<a class="cp-link" href="https://intel.sevenmidas.com.br/' + client.slug + '_' + new Date().toISOString().split('T')[0].replace(/-/g, '') + '.html" target="_blank">📊 Relatorio</a>';
+    linkHtml = '<a class="cp-link" href="https://relatorios.sevenmidas.com.br/dm2-' + client.slug + '/" target="_blank">📊 Relatorio</a>';
   }
 
   return '<div class="cp-card" style="border-left-color:' + borderColor + '">' +
     '<div class="cp-card-header">' +
       '<div class="cp-card-name">' + escapeHtml(client.nome) + '</div>' +
-      '<div class="cp-card-count">' + issues.length + ' issue' + (issues.length !== 1 ? 's' : '') + '</div>' +
+      '<div class="cp-card-count">' + totalCount + ' issue' + (totalCount !== 1 ? 's' : '') + '</div>' +
     '</div>' +
     (issuesList || '<div class="cp-issue" style="color:#00d68f">Sem problemas detectados</div>') +
     linkHtml +
@@ -162,8 +247,12 @@ function showClientsPanelView() {
   document.getElementById('calendarView').style.display = 'none';
   document.getElementById('dashboardView').style.display = 'none';
   document.getElementById('clientsPanelView').style.display = 'block';
+  var intelView = document.getElementById('intelView');
+  if (intelView) intelView.style.display = 'none';
   document.getElementById('btnCalendar').classList.remove('active');
   document.getElementById('btnDashboard').classList.remove('active');
   document.getElementById('btnClientsPanel').classList.add('active');
+  var btnIntel = document.getElementById('btnIntel');
+  if (btnIntel) btnIntel.classList.remove('active');
   renderClientsPanel();
 }
