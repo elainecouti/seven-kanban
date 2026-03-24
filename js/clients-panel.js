@@ -7,7 +7,8 @@ async function renderClientsPanel() {
   container.innerHTML = '<div style="text-align:center;padding:40px;color:var(--text-muted)">Carregando painel de clientes...</div>';
 
   // ── Fonte 1: intelligence_actions (últimas 48h, pega a execução mais recente) ──
-  var cutoff = new Date(Date.now() - 48 * 3600000).toISOString();
+  // Só mostra intelligence_actions das últimas 12h (dados frescos)
+  var cutoff = new Date(Date.now() - 12 * 3600000).toISOString();
   var { data: actions } = await sb.from('intelligence_actions')
     .select('*')
     .gte('created_at', cutoff)
