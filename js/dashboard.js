@@ -88,6 +88,33 @@ async function renderDashboard() {
   html += '<div class="dash-chart-card dash-comments-card">';
   html += '<div class="dash-chart-title">Atividade Recente</div>';
   html += '<div id="dashRecentComments"><div style="color:var(--text-muted);font-size:13px">Carregando...</div></div>';
+  // Done cards
+  var doneCards = source.filter(function(c) { return c.column_key === 'done'; })
+    .sort(function(a, b) { return new Date(b.updated_at) - new Date(a.updated_at); })
+    .slice(0, 10);
+  if (doneCards.length > 0) {
+    html += '<div class="dash-done-divider">Tarefas Concluídas</div>';
+    html += '<div class="dash-done-list">';
+    doneCards.forEach(function(c) {
+      var client = getClient(c.client_id);
+      var clientName = client ? client.name : '';
+      var pri = getPriorityInfo(c.priority);
+      var updTime = new Date(c.updated_at);
+      var timeStr = updTime.toLocaleDateString('pt-BR') + ' ' + updTime.toLocaleTimeString('pt-BR', {hour:'2-digit', minute:'2-digit'});
+      html += '<div class="dash-done-item" onclick="openCardDetail(\'' + c.id + '\')">' +
+        '<span class="dash-done-check">✓</span>' +
+        '<div class="dash-done-info">' +
+          '<span class="dash-done-title">' + escapeHtml(c.title) + '</span>' +
+          (clientName ? '<span class="dash-done-client">' + escapeHtml(clientName) + '</span>' : '') +
+        '</div>' +
+        '<div class="dash-done-meta">' +
+          '<span class="dash-done-pri" style="color:' + pri.color + '">' + pri.label + '</span>' +
+          '<span class="dash-done-time">' + timeStr + '</span>' +
+        '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+  }
   html += '</div>';
 
   html += '</div>'; // dash-container end

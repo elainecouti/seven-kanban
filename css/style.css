@@ -830,6 +830,18 @@ body {
 .dash-comment-card { font-size: 11px; color: var(--accent); font-weight: 600; }
 .dash-comment-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; padding-left: 30px; }
 
+.dash-done-divider { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); padding: 14px 10px 6px; border-top: 1px solid var(--border-light); margin-top: 8px; }
+.dash-done-list { display: flex; flex-direction: column; gap: 2px; }
+.dash-done-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: 8px; cursor: pointer; transition: var(--transition); }
+.dash-done-item:hover { background: var(--border-light); }
+.dash-done-check { width: 18px; height: 18px; border-radius: 50%; background: #00b894; color: #fff; font-size: 10px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.dash-done-info { flex: 1; min-width: 0; }
+.dash-done-title { font-size: 13px; color: var(--text-secondary); text-decoration: line-through; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.dash-done-client { font-size: 11px; color: var(--text-muted); }
+.dash-done-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 2px; flex-shrink: 0; }
+.dash-done-pri { font-size: 11px; font-weight: 600; }
+.dash-done-time { font-size: 11px; color: var(--text-muted); white-space: nowrap; }
+
 /* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
   .header { flex-wrap: wrap; padding: 10px 12px; gap: 8px; }
